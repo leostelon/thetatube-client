@@ -16,7 +16,6 @@ const createToken = async function (address) {
 
 		return token;
 	} catch (error) {
-		console.log(error)
 		console.log(error.message);
 	}
 };
