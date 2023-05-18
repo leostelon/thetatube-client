@@ -11,12 +11,12 @@ export default function Profile() {
         <Grid container sx={{ color: "white" }}>
           <Grid iteam>
             <Avatar
-              //   sx={{ bgcolor: deepOrange[500] }}
               alt="Remy Sharp"
               src="/broken-image.jpg"
               sx={{
-                height: "128px",
-                width: "128px",
+                bgcolor: "#f45966",
+                height: "100px",
+                width: "100px",
                 mr: 3,
               }}
             >
@@ -50,6 +50,48 @@ export default function Profile() {
           </Grid>
         </>
         <hr style={{ backgroundColor: "gray" }} />
+      </Box>
+
+      <Box
+        style={{
+          width: "100%",
+          display: "flex",
+          //   justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Box
+          style={{
+            width: "200px",
+            height: "200px",
+          }}
+        >
+          <img
+            style={{ width: "100%", height: "100%" }}
+            src="/images/profile_video_notFound.svg"
+            alt=""
+            srcset=""
+          />
+        </Box>
+
+        <Box sx={{ fontSize: 24 }}>Upload a video to get started</Box>
+
+        <Box
+          sx={{
+            fontSize: 14,
+            mt: 2,
+            maxWidth: "480px",
+            textAlign: "center",
+            color: "gray",
+          }}
+        >
+          Start sharing your story and connecting with viewers. Videos that you
+          upload will show up here.
+        </Box>
+        <Button variant="outlined" sx={{ br: 5, mt: 2 }}>
+          Upload Video
+        </Button>
       </Box>
     </>
   );
