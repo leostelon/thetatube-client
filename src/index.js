@@ -7,8 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-	<React.StrictMode>
-		<App />
-		<ToastContainer position="bottom-center" pauseOnHover autoClose={3000} />
-	</React.StrictMode>
+  //   <React.StrictMode>
+  <>
+    <App />
+    <ToastContainer position="bottom-center" pauseOnHover autoClose={3000} />
+  </>
+  //   </React.StrictMode>
 );
