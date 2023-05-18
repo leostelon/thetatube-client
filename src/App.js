@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import { Home } from "./screens/Home";
 import { Upload } from "./screens/Upload";
+import { Video } from "./screens/Video";
 import Profile from "./screens/Profile";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" exact element={<Home />} />
             <Route path="/upload" exact element={<Upload />} />
             <Route path="/profile" exact element={<Profile />} />
+            <Route path="/video/:videoId" exact element={<Video />} />
           </Routes>
         </div>
       </AppStyled>
@@ -24,11 +26,5 @@ function App() {
 export default App;
 
 const AppStyled = styled.div`
-  //   display: flex;
-  //   justify-content: space-between;
-  //   padding: 40px 12px;
-  //   position: relative;
-  //   width: 100%;
-  //   max-width: 1240px;
   padding: 0 5vw;
 `;

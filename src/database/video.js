@@ -37,3 +37,13 @@ export async function getVideos() {
 		console.log(error.message);
 	}
 }
+
+export async function getVideo(videoId) {
+	try {
+		const response = await collectionReference.record(videoId).get();
+		await collectionReference.record(videoId).call("incrementView", []);
+		return response.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+}
