@@ -1,0 +1,22 @@
+@public
+collection Video {
+  id: string; // theta videoID
+  publicKey?: PublicKey;
+  name: string;
+  description: string;
+  creator: string;
+  // length: number; // Add length to video
+  drm: boolean;
+  nft_address?: string;
+  timestamp: number;
+
+  constructor (id: string, name: string, description: string, creator: string, drm: boolean, nft_address: string) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.creator = creator;
+    this.drm = drm;
+    this.nft_address = nft_address;
+    this.timestamp = Date.now();
+  }
+}

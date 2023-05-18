@@ -7,6 +7,8 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { SearchComponent } from "./search/SearchComponent";
+import { createUser } from "../database/user";
+import { getVideos } from "../database/video";
 
 export const Navbar = ({ disableSearch = false }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -25,9 +27,13 @@ export const Navbar = ({ disableSearch = false }) => {
 		await connectWalletToSite();
 		const address = await getWalletAddress();
 		if (address && address !== "") {
+			let token = localStorage.getItem("token");
 			localStorage.setItem("address", address);
-			if (address && address !== "" && address !== "undefined") {
-				// Connect user here
+			if (!token || token === "" || token === "undefined") {
+				await createUser(address);
+			}
+			token = localStorage.getItem("token");
+			if (token && token !== "" && token !== "undefined") {
 				setConnectedToSite(true);
 			}
 		}
@@ -66,7 +72,8 @@ export const Navbar = ({ disableSearch = false }) => {
 					}}
 				>
 					<Box className="navlist">
-						<p onClick={() => navigate("/explore")}>Explore</p>
+						<p onClick={() => getVideos()}>Test Button</p>
+						<p onClick={() => navigate("/upload")}>Upload</p>
 						<p
 							onClick={() =>
 								window.open("https://github.com/leostelon/dedocker", "_blank")
