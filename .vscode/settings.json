@@ -1,0 +1,7 @@
+{
+  "editor.insertSpaces": true,
+  "prettier.tabWidth": 2,
+  "workbench.editor.wrapTabs": true,
+  "editor.detectIndentation": false,
+  "prettier.useTabs": true
+}
