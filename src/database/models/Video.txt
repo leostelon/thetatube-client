@@ -9,8 +9,9 @@ collection Video {
   drm: boolean;
   nft_address?: string;
   timestamp: number;
+  views: number;
 
-  constructor (id: string, name: string, description: string, creator: string, drm: boolean, nft_address: string) {
+  constructor (id: string, name: string, description: string, creator: string, drm: boolean, nft_address: string, thumbnail: string) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -18,5 +19,11 @@ collection Video {
     this.drm = drm;
     this.nft_address = nft_address;
     this.timestamp = Date.now();
+    this.views = 0;
+    this.thumbnail = thumbnail;
+  }
+
+  incrementView() {
+    this.views = this.views + 1;
   }
 }
