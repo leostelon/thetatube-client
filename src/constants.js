@@ -29,3 +29,5 @@ export const ChainsConfig = {
 };
 
 export const CONTRACT_ADDRESS = "0xb1Cf086A2A4061e5f448Ce84d726b68A391dB17a";
+export const THETA_KEY = process.env.REACT_APP_THETA_API_KEY;
+export const THETA_SECRET = process.env.REACT_APP_THETA_SECRET;

@@ -55,7 +55,7 @@ export const Navbar = ({ disableSearch = false }) => {
 					style={{ cursor: "pointer" }}
 				>
 					<h1 style={{ alignItems: "flex-start", display: "flex" }}>
-						🔵Daggle{" "}
+						📺ThetaTube{" "}
 					</h1>
 				</div>
 				<div
