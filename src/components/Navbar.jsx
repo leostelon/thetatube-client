@@ -7,6 +7,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { SearchComponent } from "./search/SearchComponent";
+import { createUser } from "../database/user";
 
 export const Navbar = ({ disableSearch = false }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -25,9 +26,14 @@ export const Navbar = ({ disableSearch = false }) => {
 		await connectWalletToSite();
 		const address = await getWalletAddress();
 		if (address && address !== "") {
+			let token = localStorage.getItem("token");
 			localStorage.setItem("address", address);
-			if (address && address !== "" && address !== "undefined") {
-				// Connect user here
+			if (!token || token === "" || token === "undefined") {
+				await createUser(address);
+			}
+			token = localStorage.getItem("token");
+			if (token && token !== "" && token !== "undefined") {
+				console.log(typeof token, token);
 				setConnectedToSite(true);
 			}
 		}
