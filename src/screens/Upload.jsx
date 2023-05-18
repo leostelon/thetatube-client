@@ -27,7 +27,6 @@ export const Upload = () => {
 			return alert("Please enter a description for this dataset.");
 		setUploadLoading(true);
 		// Upload File here
-		// await uploadDataset(file, `${name}:${version}`, description);
 		await uploadVideo(file, name, description);
 
 		toast("Successfully uploaded your dataset", { type: "success" });

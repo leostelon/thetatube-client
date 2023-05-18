@@ -8,6 +8,7 @@ import { MdOutlinePersonOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { SearchComponent } from "./search/SearchComponent";
 import { createUser } from "../database/user";
+import { getVideos } from "../database/video";
 
 export const Navbar = ({ disableSearch = false }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -33,7 +34,6 @@ export const Navbar = ({ disableSearch = false }) => {
 			}
 			token = localStorage.getItem("token");
 			if (token && token !== "" && token !== "undefined") {
-				console.log(typeof token, token);
 				setConnectedToSite(true);
 			}
 		}
@@ -72,7 +72,8 @@ export const Navbar = ({ disableSearch = false }) => {
 					}}
 				>
 					<Box className="navlist">
-						<p onClick={() => navigate("/explore")}>Explore</p>
+						<p onClick={() => getVideos()}>Test Button</p>
+						<p onClick={() => navigate("/upload")}>Upload</p>
 						<p
 							onClick={() =>
 								window.open("https://github.com/leostelon/dedocker", "_blank")

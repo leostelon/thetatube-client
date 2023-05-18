@@ -7,6 +7,7 @@ collection User {
   username?: string;
   token?: string;
   updatedUsername:boolean;
+  profile_image?: string;
   premium:boolean;
 
   constructor (id: string) {
@@ -31,5 +32,9 @@ collection User {
 
   updatePremium() {
      this.premium = true;
+  }
+
+  updateProfileImage(url: string) {
+     this.profile_image = url;
   }
 }
