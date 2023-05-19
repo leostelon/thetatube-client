@@ -45,7 +45,7 @@ const getUser = async function (address) {
 		try {
 			user = await collectionReference.record(address).get();
 		} catch (err) {}
-		return user;
+		return user.data;
 	} catch (error) {
 		console.log(error.message);
 	}

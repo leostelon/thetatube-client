@@ -14,7 +14,7 @@ function App() {
 					<Routes>
 						<Route path="/" exact element={<Home />} />
 						<Route path="/upload" exact element={<Upload />} />
-						<Route path="/profile" exact element={<Profile />} />
+						<Route path="/profile/:userAddress" exact element={<Profile />} />
 						<Route path="/video/:videoId" exact element={<Video />} />
 					</Routes>
 				</div>
