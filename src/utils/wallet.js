@@ -25,8 +25,8 @@ export async function connectWalletToSite() {
 }
 
 export async function switchChain() {
-	const config = { ...ChainsConfig["THETA_TESTNET"] };
-	config.chainId = Web3.utils.toHex(ChainsConfig["THETA_TESTNET"].chainId);
+	const config = { ...ChainsConfig["POLYGON_TESTNET"] };
+	config.chainId = Web3.utils.toHex(ChainsConfig["POLYGON_TESTNET"].chainId);
 
 	try {
 		await window.ethereum.request({

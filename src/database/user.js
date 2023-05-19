@@ -1,5 +1,6 @@
 const { db } = require(".");
 const jwt = require("jsonwebtoken");
+const { getWalletAddress } = require("../utils/wallet");
 
 const collectionReference = db.collection("User");
 
@@ -51,4 +52,16 @@ const getUser = async function (address) {
 	}
 };
 
-module.exports = { createToken, createUser, getUser };
+const enableSubscription = async function (contractAddress) {
+	try {
+		const userAddress = await getWalletAddress();
+		const response = await collectionReference
+			.record(userAddress)
+			.call("updatePremium", [contractAddress]);
+		return response.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+module.exports = { createToken, createUser, getUser, enableSubscription };
