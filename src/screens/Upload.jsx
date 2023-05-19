@@ -28,8 +28,7 @@ export const Upload = () => {
 			return toast("Please enter a name for this dataset.");
 		if (!description || description === "")
 			return toast("Please enter a description for this dataset.");
-		if (!duration || duration === "")
-			return toast("Unable to fetch video duration.");
+		if (!duration) return toast("Unable to fetch video duration.");
 		setUploadLoading(true);
 		// Upload File here
 		await uploadVideo(file, thumbnailFile, name, description, duration);
@@ -49,14 +48,16 @@ export const Upload = () => {
 		video.preload = "metadata";
 		video.onloadedmetadata = function () {
 			window.URL.revokeObjectURL(video.src);
-			console.log("dureation ====", video.duration);
-			if (video.duration !== null) setDuration(video.duratio);
+			console.log("duration ====", video.duration);
+			if (video.duration !== null) setDuration(video.duration);
 		};
 
 		video.src = URL.createObjectURL(file);
 
 		setFile(file);
 	}
+
+	console.log(duration);
 
 	return (
 		<Box>
@@ -110,7 +111,8 @@ export const Upload = () => {
 								type="file"
 								hidden
 								onChange={(e) => {
-									if (e.target.files[0] !== "video/mp4")
+									console.log(e.target.files[0]);
+									if (e.target.files[0]?.type !== "video/mp4")
 										toast("Please select a file with type video/mp4!");
 									else setFileInfo(e.target.files[0]);
 								}}
@@ -141,7 +143,9 @@ export const Upload = () => {
 								type="file"
 								hidden
 								onChange={(e) => {
-									if (thumbnailFile?.type?.split("/")[0] !== "image")
+									console.log(e.target.files[0]);
+
+									if (e.target.files[0]?.type?.split("/")[0] !== "image")
 										toast("Please select a file with type image!");
 									else setThumbnailFile(e.target.files[0]);
 								}}
