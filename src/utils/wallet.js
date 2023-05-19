@@ -53,5 +53,6 @@ export async function getWalletAddress() {
 		return address;
 	} catch (error) {
 		console.log(error);
+		return undefined;
 	}
 }
