@@ -9,15 +9,26 @@ import { styled as muiStyled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { blueGrey, deepOrange, grey } from "@mui/material/colors";
 
+import Lottie from "lottie-react";
+import videoLoader from "../assets/videoLoader.json";
+import { timeSince } from "../utils/time";
+import { getUser } from "../database/user";
+
 export const Video = () => {
 	const [loading, setLoading] = useState(true);
 	const [video, setVideo] = useState();
+	const [creator, setCreator] = useState();
+
 	const { videoId } = useParams();
 
 	async function getVideoFromId(videoId) {
 		setLoading(true);
 		const response = await getVideo(videoId);
 		setVideo(response);
+		if (response?.creator?.collectionId) {
+			const creator = await getUser(response.creator.collectionId);
+			setCreator(creator);
+		}
 		setLoading(false);
 	}
 
@@ -25,6 +36,9 @@ export const Video = () => {
 		getVideoFromId(videoId);
 	}, [videoId]);
 
+	console.log("=======================");
+	console.log(video, creator);
+	console.log("=======================");
 	return (
 		<Box>
 			<Navbar />
@@ -36,45 +50,28 @@ export const Video = () => {
 				}}
 			>
 				{loading ? (
-					<CircularProgress />
+					// <CircularProgress />
+					<Lottie
+						animationData={videoLoader}
+						loop={true}
+						style={{ width: "300px", height: "300px" }}
+					/>
 				) : (
 					video && (
-						// <iframe
-						// 	src={`https://player.thetavideoapi.com/video/${video.id}`}
-						// 	border="0"
-						// 	width="100%"
-						// 	height="100%"
-						// 	allowFullScreen
-						// 	className="h-[400px] w-[100%]"
-						// 	title={video.id}
-						// />
 						<ViewGridContainer>
 							<Box>
 								<VideoContainer>
-									{/* <img
-										src="/images/wall2.jpg"
-										style={{
-											height: "100%",
-											width: "100%",
-											objectFit: "cover ",
-										}}
-										alt=""
-										srcset=""
-									/> */}
 									<iframe
 										src={`https://player.thetavideoapi.com/video/${video.id}`}
 										border="0"
 										width="100%"
 										height="100%"
 										allowFullScreen
-										className="h-[400px] w-[100%]"
+										// className="h-[400px] w-[100%]"
 										title={video.id}
 									/>
 								</VideoContainer>
-								<VideoTitle>
-									Amazon Wildlife • 4K Animals of the Amazon rainforest •
-									Peaceful Relaxing Music • Nature Video HD
-								</VideoTitle>
+								<VideoTitle>{video.name && video.name}</VideoTitle>
 								<VideoGridContainer>
 									<VideoProfile>
 										<img
@@ -98,14 +95,17 @@ export const Video = () => {
 										variant="contained"
 										// ="#d1c4e9"
 									>
-										Subscribe
+										Join Premium
 									</ColorButton>
 
 									<Box>
 										{/* <RecommendedSmall>Random Chikibum</RecommendedSmall> */}
 										<RecommendedSmall>
-											650K views
-											<RecommendedSmallSpan>2 weeks ago</RecommendedSmallSpan>
+											{video.views && `${video.views} views`}
+											<RecommendedSmallSpan>
+												{video.timestamp &&
+													`${timeSince(new Date(video.timestamp))} ago`}
+											</RecommendedSmallSpan>
 										</RecommendedSmall>
 									</Box>
 								</VideoGridContainer>
@@ -163,6 +163,8 @@ const VideoContainer = styled.div`
 	padding-right: 24px;
 
 	margin-bottom: 10px;
+
+	cursor: pointer;
 `;
 
 const VideoTitle = styled.div`
@@ -177,6 +179,8 @@ const VideoTitle = styled.div`
 	max-height: 50px;
 
 	margin: 10px 0;
+
+	padding-right: 24px;
 `;
 
 const VideoGridContainer = styled.div`
