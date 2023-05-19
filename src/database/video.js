@@ -11,7 +11,8 @@ export async function createVideo(
 	creator,
 	drm,
 	nft_address,
-	thumbnail
+	thumbnail,
+	duration
 ) {
 	try {
 		const response = await collectionReference.create([
@@ -19,6 +20,7 @@ export async function createVideo(
 			name,
 			description,
 			creator,
+			duration,
 			drm,
 			nft_address,
 			thumbnail,

@@ -7,7 +7,13 @@ import { db } from "../database";
 
 const VIDEO_URL = "https://api.thetavideoapi.com";
 
-export async function uploadVideo(file, thumbnail, name, description) {
+export async function uploadVideo(
+	file,
+	thumbnail,
+	name,
+	description,
+	duration
+) {
 	try {
 		const address = localStorage.getItem("address");
 
@@ -29,7 +35,8 @@ export async function uploadVideo(file, thumbnail, name, description) {
 			db.collection("User").record(address),
 			false,
 			"",
-			thumbnailResponse
+			thumbnailResponse,
+			duration
 		);
 	} catch (error) {
 		console.log(error);
