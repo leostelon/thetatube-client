@@ -7,19 +7,21 @@ import { getVideo, getVideos } from "../database/video";
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { blueGrey, deepOrange, grey } from "@mui/material/colors";
+import { deepOrange } from "@mui/material/colors";
 
-import Lottie from "lottie-react";
-import videoLoader from "../assets/videoLoader.json";
 import { timeSince } from "../utils/time";
 import { getUser } from "../database/user";
 import { getShortAddress } from "../utils/addressShort";
+import { getWalletAddress, switchChain } from "../utils/wallet";
+import ThetaTubeInterface from "../contracts/ThetaTube.json";
 
 export const Video = () => {
 	const [loading, setLoading] = useState(true);
+	const [premiumLoading, setPremiumLoading] = useState(false);
 	const [video, setVideo] = useState();
 	const [creator, setCreator] = useState();
 	const [videos, setVideos] = useState([]);
+	const [boughtPremium, setBoughtPremium] = useState(false);
 
 	const { videoId } = useParams();
 
@@ -33,17 +35,70 @@ export const Video = () => {
 		if (response?.creator?.collectionId) {
 			const creator = await getUser(response.creator.id);
 			setCreator(creator);
+			checkPremiumBought();
 		}
 		setLoading(false);
 	}
 
+	// Check if token already exist's
+	async function checkPremiumBought() {
+		if (!creator) return;
+		const currentAddress = await getWalletAddress();
+		if (!currentAddress) alert("Please connect your wallet");
+
+		const contract = new window.web3.eth.Contract(
+			ThetaTubeInterface.abi,
+			creator.premiumContractAddress
+		);
+		const balance = await contract.methods.balanceOf(currentAddress).call();
+		if (parseInt(balance) > 0) setBoughtPremium(true);
+	}
+
+	async function joinPremium() {
+		if (!creator.premium) return alert("user has not enabled premium content!");
+		setPremiumLoading(true);
+
+		await switchChain();
+
+		const contract = new window.web3.eth.Contract(
+			ThetaTubeInterface.abi,
+			creator.premiumContractAddress
+		);
+		const currentAddress = await getWalletAddress();
+
+		// Get price
+		const price = await contract.methods.price().call({});
+
+		// Gas Calculation
+		const gasPrice = await window.web3.eth.getGasPrice();
+		const gas = await contract.methods.safeMint().estimateGas({
+			from: currentAddress,
+			value: price,
+		});
+
+		const resp = await contract.methods
+			.safeMint()
+			.send({
+				gasPrice,
+				gas,
+				from: currentAddress,
+				value: price,
+			})
+			.on("receipt", async function (receipt) {
+				// await enableSubscription(
+				// 	receipt.events.TokenDeployed.returnValues.tokenAddress
+				// );
+				setPremiumLoading(false);
+				alert("Bought Premium subscription!");
+			});
+		console.log(resp);
+	}
+
 	useEffect(() => {
 		getVideoFromId(videoId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [videoId]);
 
-	console.log("=======================");
-	console.log(video, creator, videos);
-	console.log("=======================");
 	return (
 		<Box>
 			<Navbar />
@@ -55,12 +110,7 @@ export const Video = () => {
 				}}
 			>
 				{loading ? (
-					// <CircularProgress />
-					<Lottie
-						animationData={videoLoader}
-						loop={true}
-						style={{ width: "300px", height: "300px" }}
-					/>
+					<CircularProgress />
 				) : (
 					video && (
 						<ViewGridContainer>
@@ -103,14 +153,19 @@ export const Video = () => {
 											</RecommendedSmallSpan>
 										</VideoOwnerSubs>
 									</VideoDetails>
-
 									<ColorButton
 										variant="contained"
 										// ="#d1c4e9"
+										onClick={() => joinPremium()}
 									>
-										Join Premium
+										{premiumLoading ? (
+											<CircularProgress />
+										) : boughtPremium ? (
+											"Premium Subscriber"
+										) : (
+											"Join Premium"
+										)}
 									</ColorButton>
-
 									<Box>
 										{/* <RecommendedSmall>Random Chikibum</RecommendedSmall> */}
 										{/* <RecommendedSmall>

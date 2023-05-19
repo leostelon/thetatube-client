@@ -5,12 +5,18 @@ import { useParams } from "react-router";
 import { getUser } from "../database/user";
 import { getShortAddress } from "../utils/addressShort";
 import { useNavigate } from "react-router-dom";
+import { EnableSubscription } from "../components/EnableSubscription";
 
 export default function Profile() {
 	const [user, setUser] = useState();
 	const [userLoading, setUserLoading] = useState(true);
 	const { userAddress } = useParams();
+	const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 	const navigate = useNavigate();
+
+	function handleTokenDialogClose() {
+		setSubscriptionOpen(false);
+	}
 
 	async function getUserFromDB(address) {
 		setUserLoading(true);
@@ -55,11 +61,24 @@ export default function Profile() {
 							}}
 						>
 							<Box sx={{ fontSize: 24 }}>{getShortAddress(user.id)}</Box>
-							<Box sx={{ mt: 1, fontSize: 14 }}>
-								@{user.username} 
-							</Box>
+							<Box sx={{ mt: 1, fontSize: 14 }}>@{user.username}</Box>
 						</Grid>
 					</Grid>
+					<EnableSubscription
+						isOpen={subscriptionOpen}
+						handleExternalClose={handleTokenDialogClose}
+					/>
+					<Box
+						sx={{
+							cursor: "pointer",
+							backgroundColor: "blue",
+							p: 2,
+							borderRadius: "4px",
+						}}
+						onClick={() => setSubscriptionOpen(true)}
+					>
+						<p>Enable subscription</p>
+					</Box>
 					{/* secondry nav */}
 					<Box>
 						<Grid container spacing={2} sx={{ mt: 3, ml: 2 }}>
