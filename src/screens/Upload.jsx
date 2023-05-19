@@ -1,4 +1,4 @@
-import { Box, CircularProgress, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ export const Upload = () => {
 	const [thumbnailFile, setThumbnailFile] = useState();
 	const [name, setName] = useState("Video Name");
 	const [description, setDescription] = useState("Video Description");
+	const [duration, setDuration] = useState();
 	const [loggedInAddress, setLoggedInAddress] = useState();
 	const [uploadLoading, setUploadLoading] = useState(false);
 
@@ -27,9 +28,11 @@ export const Upload = () => {
 			return toast("Please enter a name for this dataset.");
 		if (!description || description === "")
 			return toast("Please enter a description for this dataset.");
+		if (!duration || duration === "")
+			return toast("Unable to fetch video duration.");
 		setUploadLoading(true);
 		// Upload File here
-		await uploadVideo(file, thumbnailFile, name, description);
+		await uploadVideo(file, thumbnailFile, name, description, duration);
 
 		toast("Successfully uploaded your dataset", { type: "success" });
 		setUploadLoading(false);
@@ -38,6 +41,22 @@ export const Upload = () => {
 	useEffect(() => {
 		getLoggedAddress();
 	}, []);
+
+	function setFileInfo(file) {
+		if (file.type !== "video/mp4")
+			return toast("Please select a file with type video/mp4!");
+		var video = document.createElement("video");
+		video.preload = "metadata";
+		video.onloadedmetadata = function () {
+			window.URL.revokeObjectURL(video.src);
+			console.log("dureation ====", video.duration);
+			if (video.duration !== null) setDuration(video.duratio);
+		};
+
+		video.src = URL.createObjectURL(file);
+
+		setFile(file);
+	}
 
 	return (
 		<Box>
@@ -73,24 +92,61 @@ export const Upload = () => {
 							marginBottom: "16px",
 						}}
 					>
+						{/* <label>Video :</label>
 						<input
 							type="file"
 							name="file"
 							id="file"
-							onChange={(e) => setFile(e.target.files[0])}
-						/>
+							onChange={(e) => {
+								if (e.target.files[0] !== "video/mp4")
+									toast("Please select a file with type video/mp4!");
+								else setFileInfo(e.target.files[0]);
+							}}
+						/> */}
+
+						<Button variant="contained" component="label">
+							Upload Video
+							<input
+								type="file"
+								hidden
+								onChange={(e) => {
+									if (e.target.files[0] !== "video/mp4")
+										toast("Please select a file with type video/mp4!");
+									else setFileInfo(e.target.files[0]);
+								}}
+							/>
+						</Button>
 					</Box>
 					<Box
 						style={{
 							marginBottom: "16px",
 						}}
 					>
+						{/* <label>Thumnail :</label>
+
 						<input
 							type="file"
 							name="file"
 							id="file"
-							onChange={(e) => setThumbnailFile(e.target.files[0])}
-						/>
+							onChange={(e) => {
+								if (thumbnailFile["type"].split("/")[0] !== "image")
+									toast("Please select a file with type image!");
+								else setThumbnailFile(e.target.files[0]);
+							}}
+						/> */}
+
+						<Button variant="contained" component="label">
+							Upload Thumbnail
+							<input
+								type="file"
+								hidden
+								onChange={(e) => {
+									if (thumbnailFile?.type?.split("/")[0] !== "image")
+										toast("Please select a file with type image!");
+									else setThumbnailFile(e.target.files[0]);
+								}}
+							/>
+						</Button>
 					</Box>
 					<Box sx={{ mt: 1 }}>
 						<TextField
