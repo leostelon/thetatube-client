@@ -5,7 +5,7 @@ collection Video {
   name: string;
   description: string;
   creator: User;
-  // length: number; // Add length to video
+  length: number;
   drm: boolean;
   nft_address?: string;
   timestamp: number;
@@ -14,11 +14,12 @@ collection Video {
 
   @index(drm, timestamp);
 
-  constructor (id: string, name: string, description: string, creator: User, drm: boolean, nft_address: string, thumbnail: string) {
+  constructor (id: string, name: string, description: string, creator: User, length:number, drm: boolean, nft_address: string, thumbnail: string) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.creator = creator;
+    this.length = length;
     this.drm = drm;
     this.nft_address = nft_address;
     this.timestamp = Date.now();

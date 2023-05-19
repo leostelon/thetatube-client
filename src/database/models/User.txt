@@ -9,7 +9,7 @@ collection User {
   updatedUsername:boolean;
   profile_image?: string;
   premium:boolean;
-  premiumContractAddress: string;
+  premiumContractAddress?: string;
 
   constructor (id: string) {
     this.id = id;
