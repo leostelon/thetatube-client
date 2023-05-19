@@ -3,6 +3,7 @@ import { THETA_KEY, THETA_SECRET } from "../constants";
 import { toast } from "react-toastify";
 import { createVideo } from "../database/video";
 import { pinFileToIPFS } from "./nftStorage";
+import { db } from "../database";
 
 const VIDEO_URL = "https://api.thetavideoapi.com";
 
@@ -25,7 +26,7 @@ export async function uploadVideo(file, thumbnail, name, description) {
 			v.id,
 			name,
 			description,
-			address,
+			db.collection("User").record(address),
 			false,
 			"",
 			thumbnailResponse

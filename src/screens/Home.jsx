@@ -1,48 +1,86 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import styled from "styled-components";
 import "../styles/Home.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
+import { getVideos } from "../database/video";
+import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
+import { getShortAddress } from "../utils/addressShort";
+import { timeSince } from "../utils/time";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
+	const [videos, setVideos] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
+
+	async function fetchVideos() {
+		setLoading(true);
+		const response = await getVideos();
+		setVideos(response);
+		setLoading(false);
+	}
+
+	useEffect(() => {
+		fetchVideos();
+	}, []);
+
 	return (
 		<Box>
 			<Navbar />
-			<VideoCardHolder>
-				{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
-					<VideoCard>
-						<CardThumNail>
-							<img
-								src="/images/hq720.webp"
-								height="100%"
-								width="100%"
-								alt=""
-								style={{ borderRadius: "10px" }}
-							/>
-						</CardThumNail>
+			{loading ? (
+				<CircularProgress />
+			) : (
+				<VideoCardHolder>
+					{videos.map((vid, i) => {
+						let v = vid.data;
+						return (
+							<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
+								<CardThumNail>
+									<img
+										src={
+											v.thumbnail && v.thumbnail !== ""
+												? v.thumbnail
+												: NoImagePlaceholder
+										}
+										height="100%"
+										width="100%"
+										alt={v.id}
+										style={{ borderRadius: "10px" }}
+									/>
+								</CardThumNail>
 
-						<CardDetailsContainer>
-							<CardProfile>
-								<img
-									src="/images/profileImg.jpg"
-									height="100%"
-									width="100%"
-									alt=""
-									style={{ borderRadius: "50%" }}
-								/>
-							</CardProfile>
-							<CardDetails>
-								<CardTitle>I GOT MARRIED ❤️ - Irfan's View</CardTitle>
-								<CardSmall>Random Chikibum</CardSmall>
-								<CardSmall>
-									650K views
-									<CardSmallSpan>2 weeks ago</CardSmallSpan>
-								</CardSmall>
-							</CardDetails>
-						</CardDetailsContainer>
-					</VideoCard>
-				))}
-			</VideoCardHolder>
+								<CardDetailsContainer>
+									<CardProfile>
+										<img
+											src={
+												v.creator.profile_image &&
+												v.creator.profile_image !== ""
+													? v.creator.profile_image
+													: NoImagePlaceholder
+											}
+											height="100%"
+											width="100%"
+											alt={v.id + v.timestamp}
+											style={{ borderRadius: "50%" }}
+										/>
+									</CardProfile>
+									<CardDetails>
+										<CardTitle>{v.name}</CardTitle>
+										<CardSmall>{getShortAddress(v.creator.id)}</CardSmall>
+										<CardSmall>
+											{v.views} views
+											<CardSmallSpan>
+												{timeSince(new Date(v.timestamp))} ago
+											</CardSmallSpan>
+										</CardSmall>
+									</CardDetails>
+								</CardDetailsContainer>
+							</VideoCard>
+						);
+					})}
+				</VideoCardHolder>
+			)}
 		</Box>
 	);
 };
