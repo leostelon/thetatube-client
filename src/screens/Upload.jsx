@@ -7,6 +7,7 @@ import { Navbar } from "../components/Navbar";
 
 export const Upload = () => {
 	const [file, setFile] = useState();
+	const [thumbnailFile, setThumbnailFile] = useState();
 	const [name, setName] = useState("Video Name");
 	const [description, setDescription] = useState("Video Description");
 	const [loggedInAddress, setLoggedInAddress] = useState();
@@ -20,14 +21,15 @@ export const Upload = () => {
 	async function uploadFile() {
 		if (!loggedInAddress)
 			return toast("Please connect your wallet.", { type: "info" });
-		if (!file) return alert("Please select a file!"); // Enable this, disabled only for testing
+		if (!file) return toast("Please select a file!"); // Enable this, disabled only for testing
+		if (!thumbnailFile) return toast("Please add thumbnail!");
 		if (!name || name === "")
-			return alert("Please enter a name for this dataset.");
+			return toast("Please enter a name for this dataset.");
 		if (!description || description === "")
-			return alert("Please enter a description for this dataset.");
+			return toast("Please enter a description for this dataset.");
 		setUploadLoading(true);
 		// Upload File here
-		await uploadVideo(file, name, description);
+		await uploadVideo(file, thumbnailFile, name, description);
 
 		toast("Successfully uploaded your dataset", { type: "success" });
 		setUploadLoading(false);
@@ -76,6 +78,18 @@ export const Upload = () => {
 							name="file"
 							id="file"
 							onChange={(e) => setFile(e.target.files[0])}
+						/>
+					</Box>
+					<Box
+						style={{
+							marginBottom: "16px",
+						}}
+					>
+						<input
+							type="file"
+							name="file"
+							id="file"
+							onChange={(e) => setThumbnailFile(e.target.files[0])}
 						/>
 					</Box>
 					<Box sx={{ mt: 1 }}>

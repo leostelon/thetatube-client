@@ -2,12 +2,16 @@ import { default as axios } from "axios";
 import { THETA_KEY, THETA_SECRET } from "../constants";
 import { toast } from "react-toastify";
 import { createVideo } from "../database/video";
+import { pinFileToIPFS } from "./nftStorage";
 
 const VIDEO_URL = "https://api.thetavideoapi.com";
 
-export async function uploadVideo(file, name, description) {
+export async function uploadVideo(file, thumbnail, name, description) {
 	try {
 		const address = localStorage.getItem("address");
+
+		// Upload thumbnail
+		const thumbnailResponse = await pinFileToIPFS(thumbnail);
 
 		const { presignedURL, uploadId } = await createPresignedUrl();
 		await uploadToPresignedUrl(presignedURL, file);
@@ -23,7 +27,8 @@ export async function uploadVideo(file, name, description) {
 			description,
 			address,
 			false,
-			""
+			"",
+			thumbnailResponse
 		);
 	} catch (error) {
 		console.log(error);
