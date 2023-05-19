@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useParams } from "react-router-dom";
-import { getVideo } from "../database/video";
+import { getVideo, getVideos } from "../database/video";
 
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
@@ -13,11 +13,13 @@ import Lottie from "lottie-react";
 import videoLoader from "../assets/videoLoader.json";
 import { timeSince } from "../utils/time";
 import { getUser } from "../database/user";
+import { getShortAddress } from "../utils/addressShort";
 
 export const Video = () => {
 	const [loading, setLoading] = useState(true);
 	const [video, setVideo] = useState();
 	const [creator, setCreator] = useState();
+	const [videos, setVideos] = useState([]);
 
 	const { videoId } = useParams();
 
@@ -25,8 +27,11 @@ export const Video = () => {
 		setLoading(true);
 		const response = await getVideo(videoId);
 		setVideo(response);
+		const Videos = await getVideos();
+		setVideos(Videos);
+
 		if (response?.creator?.collectionId) {
-			const creator = await getUser(response.creator.collectionId);
+			const creator = await getUser(response.creator.id);
 			setCreator(creator);
 		}
 		setLoading(false);
@@ -37,7 +42,7 @@ export const Video = () => {
 	}, [videoId]);
 
 	console.log("=======================");
-	console.log(video, creator);
+	console.log(video, creator, videos);
 	console.log("=======================");
 	return (
 		<Box>
@@ -59,7 +64,7 @@ export const Video = () => {
 				) : (
 					video && (
 						<ViewGridContainer>
-							<Box>
+							<Box sx={{ mb: 3 }}>
 								<VideoContainer>
 									<iframe
 										src={`https://player.thetavideoapi.com/video/${video.id}`}
@@ -87,8 +92,16 @@ export const Video = () => {
 										/>
 									</VideoProfile>
 									<VideoDetails>
-										<VideoOwner>Ondraga Entertainment</VideoOwner>
-										<VideoOwnerSubs>1.27M subscribers</VideoOwnerSubs>
+										<VideoOwner>
+											{creator?.id && getShortAddress(creator.id)}
+										</VideoOwner>
+										<VideoOwnerSubs>
+											{video.views && `${video.views} views`}
+											<RecommendedSmallSpan>
+												{video.timestamp &&
+													`${timeSince(new Date(video.timestamp))} ago`}
+											</RecommendedSmallSpan>
+										</VideoOwnerSubs>
 									</VideoDetails>
 
 									<ColorButton
@@ -100,44 +113,53 @@ export const Video = () => {
 
 									<Box>
 										{/* <RecommendedSmall>Random Chikibum</RecommendedSmall> */}
-										<RecommendedSmall>
+										{/* <RecommendedSmall>
 											{video.views && `${video.views} views`}
 											<RecommendedSmallSpan>
 												{video.timestamp &&
 													`${timeSince(new Date(video.timestamp))} ago`}
 											</RecommendedSmallSpan>
-										</RecommendedSmall>
+										</RecommendedSmall> */}
 									</Box>
 								</VideoGridContainer>
+								<VideoDescription>
+									{video.description && video.description}
+								</VideoDescription>
 							</Box>
 							<RecommendedContainer>
-								{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
-									<RecommendedBox>
-										<RecommendedThumnail>
-											<img
-												src="/images/smallthm.webp"
-												style={{
-													height: "100%",
-													width: "100%",
-													borderRadius: "6px",
-												}}
-												alt=""
-												srcset=""
-											/>
-										</RecommendedThumnail>
-										<RecommendedDetailContainer>
-											<RecommendedTitle>
-												Mudhal Nee Mudivum Nee - Title Track Video | Darbuka
-												Siva | Sid Sriram | Thamarai
-											</RecommendedTitle>
-											<RecommendedSmall>Random Chikibum</RecommendedSmall>
-											<RecommendedSmall>
-												650K views
-												<RecommendedSmallSpan>2 weeks ago</RecommendedSmallSpan>
-											</RecommendedSmall>
-										</RecommendedDetailContainer>
-									</RecommendedBox>
-								))}
+								{videos?.length > 0 &&
+									videos.map(({ data: v }) => (
+										<RecommendedBox>
+											<RecommendedThumnail>
+												<img
+													src={
+														v.thumbnail ? v.thumbnail : "/images/not_found.svg"
+													}
+													style={{
+														height: "100%",
+														width: "100%",
+														borderRadius: "6px",
+													}}
+													alt=""
+													srcset=""
+												/>
+											</RecommendedThumnail>
+											<RecommendedDetailContainer>
+												<RecommendedTitle>{v.name && v.name}</RecommendedTitle>
+												<RecommendedSmall>
+													{v.creator?.id && getShortAddress(v.creator.id)}
+												</RecommendedSmall>
+												<RecommendedSmall>
+													{v.views !== null && `${v.views} views`}
+													{v.timestamp && (
+														<RecommendedSmallSpan>
+															{`${timeSince(new Date(v.timestamp))} ago`}
+														</RecommendedSmallSpan>
+													)}
+												</RecommendedSmall>
+											</RecommendedDetailContainer>
+										</RecommendedBox>
+									))}
 							</RecommendedContainer>
 						</ViewGridContainer>
 					)
@@ -189,7 +211,7 @@ const VideoGridContainer = styled.div`
 
 	display: flex;
 	align-items: center;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 `;
 const VideoProfile = styled.div`
 	height: 40px;
@@ -219,6 +241,12 @@ const VideoOwnerSubs = styled.div`
 	font-size: 14px;
 	font-weight: 400;
 	color: #aaa;
+`;
+
+const VideoDescription = styled.div`
+	font-size: 14px;
+	font-weight: 400;
+	/* color: #aaa; */
 `;
 // * recommended
 const RecommendedContainer = styled.div`
