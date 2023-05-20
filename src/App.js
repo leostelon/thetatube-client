@@ -6,6 +6,7 @@ import { Upload } from "./screens/Upload";
 import { Video } from "./screens/Video";
 import Profile from "./screens/Profile";
 import HomeDesign from "./screens/HomeDesign";
+import ProfileDesign from "./screens/ProfileDesign";
 
 function App() {
 	return (
@@ -14,10 +15,12 @@ function App() {
 				<div>
 					<Routes>
 						<Route path="/" exact element={<Home />} />
-						<Route path="/homeDesign" exact element={<HomeDesign />} />
 						<Route path="/upload" exact element={<Upload />} />
 						<Route path="/profile/:userAddress" exact element={<Profile />} />
 						<Route path="/video/:videoId" exact element={<Video />} />
+						{/*  */}
+						<Route path="/homeDesign" exact element={<HomeDesign />} />
+						<Route path="/profileDesign" exact element={<ProfileDesign />} />
 					</Routes>
 				</div>
 			</AppStyled>

@@ -27,7 +27,7 @@ export const Home = () => {
 
 	return (
 		<Box>
-			<Navbar />
+			{/* <Navbar /> */}
 			{loading ? (
 				<CircularProgress />
 			) : (
@@ -35,13 +35,14 @@ export const Home = () => {
 					{videos.map((vid, i) => {
 						let v = vid.data;
 						return (
-							<VideoCard onClick={() => navigate("/video/" + v.id)} key={v.id}>
+							<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
 								<CardThumNail>
 									<img
 										src={
-											v.thumbnail && v.thumbnail !== ""
-												? v.thumbnail
-												: NoImagePlaceholder
+											"/images/wall2.jpg"
+											// v.thumbnail && v.thumbnail !== ""
+											// 	? v.thumbnail
+											// 	: NoImagePlaceholder
 										}
 										height="100%"
 										width="100%"
@@ -97,6 +98,14 @@ const VideoCard = styled.div`
 	width: 340px;
 	/* background-color: black; */
 
+	/* background: rgb(221, 221, 221);
+	background: linear-gradient(
+		90deg,
+		rgba(221, 221, 221, 1) 0%,
+		rgba(236, 236, 236, 1) 51%,
+		rgba(221, 221, 221, 1) 100%
+	); */
+
 	margin-right: 10px;
 
 	&:hover {
@@ -131,14 +140,16 @@ const CardTitle = styled.div`
 	font-weight: 500;
 	margin-bottom: 6px;
 
-	color: #f1f1f1;
+	/* color: #f1f1f1; */
+	color: #363636;
 `;
 
 const CardSmall = styled.div`
 	font-size: 12px;
 	font-weight: 400;
 
-	color: #aaa;
+	/* color: #aaa; */
+	color: #6e6e6e;
 `;
 const CardSmallSpan = styled.span`
 	:before {
