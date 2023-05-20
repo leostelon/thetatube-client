@@ -113,7 +113,7 @@ export default function Profile() {
 						style={{ width: "100%", height: "100%" }}
 						src="/images/profile_video_notFound.svg"
 						alt=""
-						srcset=""
+						srcSet=""
 					/>
 				</Box>
 

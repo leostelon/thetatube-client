@@ -35,7 +35,7 @@ export const Home = () => {
 					{videos.map((vid, i) => {
 						let v = vid.data;
 						return (
-							<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
+							<VideoCard onClick={() => navigate("/video/" + v.id)} key={v.id}>
 								<CardThumNail>
 									<img
 										src={

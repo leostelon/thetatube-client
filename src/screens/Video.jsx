@@ -12,16 +12,19 @@ import { deepOrange } from "@mui/material/colors";
 import { timeSince } from "../utils/time";
 import { getUser } from "../database/user";
 import { getShortAddress } from "../utils/addressShort";
-import { getWalletAddress, switchChain } from "../utils/wallet";
+import { getWalletAddress } from "../utils/wallet";
 import ThetaTubeInterface from "../contracts/ThetaTube.json";
+import JoinSubscription from "../components/JoinSubscription";
 
 export const Video = () => {
 	const [loading, setLoading] = useState(true);
-	const [premiumLoading, setPremiumLoading] = useState(false);
+	// const [premiumLoading, setPremiumLoading] = useState(false);
 	const [video, setVideo] = useState();
 	const [creator, setCreator] = useState();
 	const [videos, setVideos] = useState([]);
 	const [boughtPremium, setBoughtPremium] = useState(false);
+
+	const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
 
 	const { videoId } = useParams();
 
@@ -52,46 +55,6 @@ export const Video = () => {
 		);
 		const balance = await contract.methods.balanceOf(currentAddress).call();
 		if (parseInt(balance) > 0) setBoughtPremium(true);
-	}
-
-	async function joinPremium() {
-		if (!creator.premium) return alert("user has not enabled premium content!");
-		setPremiumLoading(true);
-
-		await switchChain();
-
-		const contract = new window.web3.eth.Contract(
-			ThetaTubeInterface.abi,
-			creator.premiumContractAddress
-		);
-		const currentAddress = await getWalletAddress();
-
-		// Get price
-		const price = await contract.methods.price().call({});
-
-		// Gas Calculation
-		const gasPrice = await window.web3.eth.getGasPrice();
-		const gas = await contract.methods.safeMint().estimateGas({
-			from: currentAddress,
-			value: price,
-		});
-
-		const resp = await contract.methods
-			.safeMint()
-			.send({
-				gasPrice,
-				gas,
-				from: currentAddress,
-				value: price,
-			})
-			.on("receipt", async function (receipt) {
-				// await enableSubscription(
-				// 	receipt.events.TokenDeployed.returnValues.tokenAddress
-				// );
-				setPremiumLoading(false);
-				alert("Bought Premium subscription!");
-			});
-		console.log(resp);
 	}
 
 	useEffect(() => {
@@ -132,7 +95,7 @@ export const Video = () => {
 										<img
 											src="/images/wall.jpg"
 											alt=""
-											srcset=""
+											srcSet=""
 											style={{
 												height: "100%",
 												width: "100%",
@@ -155,17 +118,20 @@ export const Video = () => {
 									</VideoDetails>
 									<ColorButton
 										variant="contained"
-										// ="#d1c4e9"
-										onClick={() => joinPremium()}
+										onClick={() => setJoinSubscriptionOpen(true)}
 									>
-										{premiumLoading ? (
-											<CircularProgress />
-										) : boughtPremium ? (
-											"Premium Subscriber"
-										) : (
-											"Join Premium"
-										)}
+										{
+											// premiumLoading ? (
+											// 	<CircularProgress />
+											// ) :
+											boughtPremium ? "Premium Subscriber" : "Join Premium"
+										}
 									</ColorButton>
+									<JoinSubscription
+										isOpen={joinSubscriptionOpen}
+										handleExternalClose={setJoinSubscriptionOpen}
+										creator={creator}
+									/>
 									<Box>
 										{/* <RecommendedSmall>Random Chikibum</RecommendedSmall> */}
 										{/* <RecommendedSmall>
@@ -184,7 +150,7 @@ export const Video = () => {
 							<RecommendedContainer>
 								{videos?.length > 0 &&
 									videos.map(({ data: v }) => (
-										<RecommendedBox>
+										<RecommendedBox key={v.id}>
 											<RecommendedThumnail>
 												<img
 													src={
@@ -196,7 +162,7 @@ export const Video = () => {
 														borderRadius: "6px",
 													}}
 													alt=""
-													srcset=""
+													srcSet=""
 												/>
 											</RecommendedThumnail>
 											<RecommendedDetailContainer>
