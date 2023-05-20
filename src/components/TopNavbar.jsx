@@ -5,7 +5,7 @@ import NotificationsIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 export default function TopNavbar() {
 	return (
-		<NavHolder sx={{ px: 3 }}>
+		<NavHolder sx={{ px: 2 }}>
 			<Box>
 				<SearchComponent />
 			</Box>
@@ -24,7 +24,7 @@ export default function TopNavbar() {
 
 const NavHolder = styled(Box)({
 	width: "100%",
-	height: "70px",
+	height: "60px",
 
 	display: "flex",
 	justifyContent: "space-between",
