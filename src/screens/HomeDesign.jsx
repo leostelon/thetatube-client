@@ -10,10 +10,17 @@ import bannerImage from "../assets/ava2.jpg";
 
 export default function HomeDesign() {
 	return (
-		<Box sx={{ display: "flex", fontFamily: "Poppins, sans-serif" }}>
+		<Box
+			sx={{
+				display: "flex",
+				fontFamily: "Poppins, sans-serif",
+				backgroundColor: "#111",
+				color: "white",
+			}}
+		>
 			<CssBaseline />
 			<LeftDrawer />
-			<Box component="main" sx={{ flexGrow: 1 }}>
+			<Box component="main" sx={{ flexGrow: 1, backgroundColor: "#111" }}>
 				<TopNavbar />
 				<Box sx={{ p: 3 }}>{Banner()}</Box>
 
@@ -49,7 +56,7 @@ const BannerBox = styled(Box)({
 	width: "100%",
 	height: "300px",
 	borderRadius: "10px",
-	backgroundColor: "blue",
+	backgroundColor: "grey",
 
 	backgroundImage: `url(${bannerImage})`,
 	backgroundRepeat: "no-repeat",

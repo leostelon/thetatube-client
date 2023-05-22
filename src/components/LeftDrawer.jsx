@@ -8,20 +8,24 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-import CameraIndoorIcon from "@mui/icons-material/CameraIndoor";
-import WebIcon from "@mui/icons-material/Web";
-import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
-import BackupIcon from "@mui/icons-material/Backup";
-import PortraitIcon from "@mui/icons-material/Portrait";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { AiOutlineCloudUpload, AiOutlineHome } from "react-icons/ai";
+import {
+	MdLiveTv,
+	MdOutlineExplore,
+	MdOutlinePersonOutline,
+} from "react-icons/md";
+import Logo from "../assets/logo.png";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const mainList = [
-	{ text: "Home", icon: () => <CameraIndoorIcon /> },
-	{ text: "Browse", icon: () => <WebIcon /> },
-	{ text: "Live TV", icon: () => <OndemandVideoIcon /> },
-	{ text: "Upload", icon: () => <BackupIcon /> },
-	{ text: "Profile", icon: () => <PortraitIcon /> },
+	{ text: "Home", icon: () => <AiOutlineHome />, path: "/" },
+	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/explore" },
+	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live" },
+	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
+	{ text: "Profile", icon: () => <MdOutlinePersonOutline />, path: "/profile" },
 ];
 
 const openedMixin = (theme) => ({
@@ -64,33 +68,77 @@ const Drawer = styled(MuiDrawer, {
 
 const SmallDivider = () => (
 	<Box sx={{ width: "70%", ml: 3 }}>
-		<Divider />
+		<Divider color="grey" />
 	</Box>
 );
 
 const open = true;
 
 export default function LeftDrawer() {
-	// const [open, setOpen] = useState(true);
+	const location = useLocation();
+	const navigate = useNavigate();
+	const [index, setIndex] = useState(0);
+
+	function updateIndex(path) {
+		switch (path) {
+			case "/":
+				return setIndex(0);
+			case "/explroe":
+				return setIndex(1);
+			case "/live":
+				return setIndex(2);
+			case "/upload":
+				return setIndex(3);
+			case "/profile":
+				return setIndex(4);
+			default:
+				setIndex(0);
+		}
+	}
+
+	useEffect(() => {
+		updateIndex(location.pathname);
+	}, [location.pathname]);
+
 	return (
-		<Drawer variant="permanent" open={open}>
-			<Box sx={{ pl: 2, pr: 2 }}>
+		<Drawer
+			variant="permanent"
+			open={open}
+			PaperProps={{
+				sx: {
+					backgroundColor: "#111",
+					color: "white",
+				},
+			}}
+		>
+			<Box sx={{ mt: 3 }}>
 				<Box
-					sx={{ p: 2 }}
+					sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
 					// onClick={() => {
 					// 	setOpen((s) => !s);
 					// }}
 				>
-					<h2>
-						Theta.
-						<span style={{ color: "red", fontFamily: "Roboto" }}>TUBE</span>
+					<img height={"40px"} src={Logo} alt="homepage-logo" />
+					&nbsp;
+					<h2 style={{ paddingTop: "8px" }}>
+						Theta
+						<span style={{ color: "#28E0B9" }}>.TUBE</span>
 					</h2>
 				</Box>
-				<SmallDivider />
 
 				<List>
-					{mainList.map(({ text, icon }, index) => (
-						<ListItem key={text} disablePadding sx={{ display: "block" }}>
+					{mainList.map(({ text, icon, path }, i) => (
+						<ListItem
+							key={text}
+							disablePadding
+							sx={{
+								display: "block",
+								"&:hover": {
+									background: "rgb(38 38 38 / 87%)",
+								},
+							}}
+							onClick={() => navigate(path)}
+						>
 							<ListItemButton
 								sx={{
 									minHeight: 48,
@@ -98,11 +146,23 @@ export default function LeftDrawer() {
 									px: 2.5,
 								}}
 							>
+								<Box
+									sx={{
+										borderRight: index === i ? "5px solid #28E0B9" : "",
+										borderTopRightRadius: "4px",
+										borderBottomRightRadius: "4px",
+										mr: "12px",
+									}}
+								>
+									&#8203;
+								</Box>
 								<ListItemIcon
 									sx={{
 										minWidth: 0,
 										mr: open ? 3 : "auto",
+										color: index === i ? "#28E0B9" : "white",
 										justifyContent: "center",
+										fontSize: "24px",
 									}}
 								>
 									{icon()}

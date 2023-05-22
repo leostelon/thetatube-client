@@ -5,16 +5,16 @@ import NotificationsIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 export default function TopNavbar() {
 	return (
-		<NavHolder sx={{ px: 2 }}>
+		<NavHolder sx={{ px: 2, backgroundColor: "#111" }}>
 			<Box>
 				<SearchComponent />
 			</Box>
 
 			<NavRightContainer>
-				<IconButton sx={{ color: "#4a4a4a" }}>
+				<IconButton sx={{ color: "white" }}>
 					<NotificationsIcon />
 				</IconButton>
-				<IconButton sx={{ color: "#4a4a4a" }}>
+				<IconButton sx={{ color: "white" }}>
 					<AccountCircleIcon />
 				</IconButton>
 			</NavRightContainer>

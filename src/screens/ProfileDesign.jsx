@@ -11,7 +11,7 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 // import bannerImage from "../assets/profileBack.jpg";
 import bannerImage from "../assets/wall3.jpg";
 import profileDp from "../assets/girlDP.jpg";
-import { deepOrange, purple, teal } from "@mui/material/colors";
+import { purple, teal } from "@mui/material/colors";
 import { Home } from "./Home";
 
 export default function ProfileDesign() {

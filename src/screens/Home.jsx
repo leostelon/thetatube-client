@@ -2,7 +2,6 @@ import { Box, CircularProgress } from "@mui/material";
 import styled from "styled-components";
 import "../styles/Home.css";
 import React, { useEffect, useState } from "react";
-import { Navbar } from "../components/Navbar";
 import { getVideos } from "../database/video";
 import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
@@ -26,7 +25,7 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<Box>
+		<Box backgroundColor="#111">
 			{/* <Navbar /> */}
 			{loading ? (
 				<CircularProgress />
@@ -141,7 +140,7 @@ const CardTitle = styled.div`
 	margin-bottom: 6px;
 
 	/* color: #f1f1f1; */
-	color: #363636;
+	color: white;
 `;
 
 const CardSmall = styled.div`
