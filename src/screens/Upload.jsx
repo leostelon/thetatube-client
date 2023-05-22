@@ -77,7 +77,6 @@ export const Upload = () => {
 						border: "2px solid grey",
 						borderStyle: "dotted",
 						p: 4,
-						backgroundColor: "#1b1c1d",
 					}}
 				>
 					<h3

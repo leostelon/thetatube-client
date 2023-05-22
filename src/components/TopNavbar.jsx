@@ -5,7 +5,7 @@ import NotificationsIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 export default function TopNavbar() {
 	return (
-		<NavHolder sx={{ px: 2, backgroundColor: "#111" }}>
+		<NavHolder sx={{ px: 2 }}>
 			<Box>
 				<SearchComponent />
 			</Box>

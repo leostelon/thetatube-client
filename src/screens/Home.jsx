@@ -25,7 +25,7 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<Box backgroundColor="#111">
+		<Box>
 			{/* <Navbar /> */}
 			{loading ? (
 				<CircularProgress />

@@ -311,7 +311,6 @@ const RecommendedTitle = styled.div`
 const RecommendedSmall = styled.div`
 	font-size: 13px;
 	font-weight: 400;
-	font-family: "Roboto", "Arial", sans-serif;
 	color: #aaa;
 	padding: 2px 0;
 `;

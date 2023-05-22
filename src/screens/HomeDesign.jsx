@@ -14,13 +14,12 @@ export default function HomeDesign() {
 			sx={{
 				display: "flex",
 				fontFamily: "Poppins, sans-serif",
-				backgroundColor: "#111",
 				color: "white",
 			}}
 		>
 			<CssBaseline />
 			<LeftDrawer />
-			<Box component="main" sx={{ flexGrow: 1, backgroundColor: "#111" }}>
+			<Box component="main" sx={{ flexGrow: 1 }}>
 				<TopNavbar />
 				<Box sx={{ p: 3 }}>{Banner()}</Box>
 

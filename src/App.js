@@ -14,13 +14,13 @@ function App() {
 			<AppStyled>
 				<div>
 					<Routes>
-						<Route path="/" exact element={<Home />} />
+						{/* <Route path="/" exact element={<Home />} /> */}
 						<Route path="/upload" exact element={<Upload />} />
 						<Route path="/profile/:userAddress" exact element={<Profile />} />
 						<Route path="/video/:videoId" exact element={<Video />} />
 						{/*  */}
-						<Route path="/homeDesign" exact element={<HomeDesign />} />
-						<Route path="/profileDesign" exact element={<ProfileDesign />} />
+						<Route path="/" exact element={<HomeDesign />} />
+						<Route path="/profile" exact element={<ProfileDesign />} />
 					</Routes>
 				</div>
 			</AppStyled>

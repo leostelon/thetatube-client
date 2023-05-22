@@ -73,6 +73,7 @@ const SmallDivider = () => (
 );
 
 const open = true;
+const PrimaryColor = "#28E0B9";
 
 export default function LeftDrawer() {
 	const location = useLocation();
@@ -101,16 +102,7 @@ export default function LeftDrawer() {
 	}, [location.pathname]);
 
 	return (
-		<Drawer
-			variant="permanent"
-			open={open}
-			PaperProps={{
-				sx: {
-					backgroundColor: "#111",
-					color: "white",
-				},
-			}}
-		>
+		<Drawer variant="permanent" open={open}>
 			<Box sx={{ mt: 3 }}>
 				<Box
 					sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
@@ -122,7 +114,7 @@ export default function LeftDrawer() {
 					&nbsp;
 					<h2 style={{ paddingTop: "8px" }}>
 						Theta
-						<span style={{ color: "#28E0B9" }}>.TUBE</span>
+						<span style={{ color: PrimaryColor }}>.TUBE</span>
 					</h2>
 				</Box>
 
@@ -148,7 +140,7 @@ export default function LeftDrawer() {
 							>
 								<Box
 									sx={{
-										borderRight: index === i ? "5px solid #28E0B9" : "",
+										borderRight: index === i ? `5px solid ${PrimaryColor}` : "",
 										borderTopRightRadius: "4px",
 										borderBottomRightRadius: "4px",
 										mr: "12px",
@@ -160,7 +152,7 @@ export default function LeftDrawer() {
 									sx={{
 										minWidth: 0,
 										mr: open ? 3 : "auto",
-										color: index === i ? "#28E0B9" : "white",
+										color: index === i ? PrimaryColor : "white",
 										justifyContent: "center",
 										fontSize: "24px",
 									}}
