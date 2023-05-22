@@ -10,11 +10,17 @@ import ListItemText from "@mui/material/ListItemText";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { AiOutlineCloudUpload, AiOutlineHome } from "react-icons/ai";
+import {
+	AiOutlineCloudUpload,
+	AiOutlineHome,
+	AiOutlineLogout,
+} from "react-icons/ai";
 import {
 	MdLiveTv,
 	MdOutlineExplore,
+	MdOutlineLogout,
 	MdOutlinePersonOutline,
+	MdOutlineWorkspacePremium,
 } from "react-icons/md";
 import Logo from "../assets/logo.png";
 
@@ -26,6 +32,11 @@ const mainList = [
 	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live" },
 	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
 	{ text: "Profile", icon: () => <MdOutlinePersonOutline />, path: "/profile" },
+	{
+		text: "Premium Content",
+		icon: () => <MdOutlineWorkspacePremium />,
+		path: "/premium",
+	},
 ];
 
 const openedMixin = (theme) => ({
@@ -75,7 +86,7 @@ const SmallDivider = () => (
 const open = true;
 const PrimaryColor = "#28E0B9";
 
-export default function LeftDrawer() {
+export default function LeftDrawer({ smaller }) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [index, setIndex] = useState(0);
@@ -102,7 +113,7 @@ export default function LeftDrawer() {
 	}, [location.pathname]);
 
 	return (
-		<Drawer variant="permanent" open={open}>
+		<Drawer variant="permanent" open={smaller ? false : open}>
 			<Box sx={{ mt: 3 }}>
 				<Box
 					sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
@@ -165,6 +176,68 @@ export default function LeftDrawer() {
 					))}
 				</List>
 				<SmallDivider />
+			</Box>
+
+			{/* Down */}
+			<Box
+				sx={{ mt: 3, position: "absolute", bottom: "30px", left: 0, right: 0 }}
+			>
+				<List>
+					<ListItem
+						// key={text}
+						disablePadding
+						sx={{
+							display: "block",
+							"&:hover": {
+								background: "rgb(38 38 38 / 87%)",
+							},
+						}}
+						// onClick={() => navigate(path)}
+					>
+						<ListItemButton
+							sx={{
+								minHeight: 48,
+								justifyContent: open ? "initial" : "center",
+								px: 2.5,
+							}}
+						>
+							<Box
+								sx={{
+									// borderRight: index === i ? `5px solid ${PrimaryColor}` : "",
+									borderTopRightRadius: "4px",
+									borderBottomRightRadius: "4px",
+									mr: "12px",
+								}}
+							>
+								&#8203;
+							</Box>
+							<ListItemIcon
+								sx={{
+									minWidth: 0,
+									mr: open ? 3 : "auto",
+									justifyContent: "center",
+									fontSize: "24px",
+									color: "red",
+								}}
+							>
+								<MdOutlineLogout />
+							</ListItemIcon>
+							<ListItemText
+								primary={"Log Out"}
+								sx={
+									({ opacity: open ? 1 : 0 },
+									[
+										{
+											["&:hover"]: {
+												color: "red",
+											},
+										},
+									])
+								}
+							/>
+						</ListItemButton>
+					</ListItem>
+				</List>
 			</Box>
 		</Drawer>
 	);
