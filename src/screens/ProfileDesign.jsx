@@ -6,7 +6,7 @@ import { Button, IconButton, styled } from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
 import { BsCardImage } from "react-icons/bs";
-import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
+import { MdVideoFile } from "react-icons/md";
 
 // import bannerImage from "../assets/profileBack.jpg";
 import bannerImage from "../assets/wall3.jpg";
@@ -57,10 +57,7 @@ const ProfileBox = () => {
 				</ProfileDetailsContainerLeft>
 				<ProfileDetailsContainerRight>
 					<Box>
-						<PurpleColorButton
-							variant="contained"
-							startIcon={<VideoCallOutlinedIcon />}
-						>
+						<PurpleColorButton variant="contained" startIcon={<MdVideoFile />}>
 							Upload New Videos
 						</PurpleColorButton>
 					</Box>

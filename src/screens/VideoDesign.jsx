@@ -379,10 +379,11 @@ const RecommendedSmallSpan = styled.span`
 
 const ColorButton = muiStyled(Button)(({ theme }) => ({
 	// color: theme.palette.getContrastText(grey[300]),
-	backgroundColor: deepOrange[500],
+	// backgroundColor: deepOrange[500],
+	backgroundColor: "#e1b24b",
 	// contrastText: black,
 	"&:hover": {
-		backgroundColor: deepOrange[800],
+		backgroundColor: "#d2a033",
 	},
 	marginRight: "8px",
 }));

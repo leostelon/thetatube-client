@@ -1,7 +1,6 @@
 import { Box, IconButton, styled } from "@mui/material";
 import { SearchComponent } from "./search/SearchComponent";
-import AccountCircleIcon from "@mui/icons-material/AccountCircleOutlined";
-import NotificationsIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import { MdNotificationsNone, MdAccountCircle } from "react-icons/md";
 
 export default function TopNavbar() {
 	return (
@@ -12,10 +11,10 @@ export default function TopNavbar() {
 
 			<NavRightContainer>
 				<IconButton sx={{ color: "white" }}>
-					<NotificationsIcon />
+					<MdNotificationsNone />
 				</IconButton>
 				<IconButton sx={{ color: "white" }}>
-					<AccountCircleIcon />
+					<MdAccountCircle />
 				</IconButton>
 			</NavRightContainer>
 		</NavHolder>

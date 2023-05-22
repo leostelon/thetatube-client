@@ -1,7 +1,9 @@
 import "./search.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { TbSearch } from "react-icons/tb";
+import { MdSearch } from "react-icons/md";
+import { Divider, IconButton, InputBase, Paper } from "@mui/material";
+import { Box } from "@mui/system";
 
 export function SearchComponent() {
 	const navigate = useNavigate();
@@ -22,7 +24,7 @@ export function SearchComponent() {
 
 	return (
 		<div>
-			<div className="search-container">
+			{/* <div className="search-container">
 				<TbSearch
 					onClick={onSearch}
 					color="grey"
@@ -37,7 +39,30 @@ export function SearchComponent() {
 					value={input}
 					onInput={(e) => setInput(e.target.value)}
 				/>
-			</div>
+			</div> */}
+
+			<Paper
+				component="form"
+				sx={{
+					p: "2px 4px",
+					display: "flex",
+					alignItems: "center",
+					width: 340,
+					height: "40px",
+				}}
+			>
+				<Box sx={{ mt: 1 }}>
+					<MdSearch style={{ width: "40px", height: "30px" }} />
+				</Box>
+				{/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" /> */}
+				<InputBase
+					sx={{ ml: 1, flex: 1 }}
+					placeholder="Search videos ..."
+					inputProps={{ "aria-label": "search videos ..." }}
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+				/>
+			</Paper>
 		</div>
 	);
 }
