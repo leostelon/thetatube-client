@@ -1,0 +1,23 @@
+@public
+collection Like {
+  id: string;
+  liked: boolean;
+  videoId: string;
+  user: string;
+  timestamp: number;
+
+  @index(user, liked);
+  @index(videoId, user);
+  
+  constructor(liked: boolean, videoId: string, user: string) {
+    this.id = this.videoId + this.user;
+    this.liked = liked;
+    this.videoId = videoId;
+    this.user = user;
+    this.timestamp = Date.now();
+  }
+
+  toggleLiked() {
+    this.liked = !this.liked;
+  }
+}
