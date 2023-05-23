@@ -13,6 +13,14 @@ const darkTheme = createTheme({
 			default: "#111",
 		},
 	},
+	breakpoints: {
+		values: {
+			laptop: 1024,
+			tablet: 760,
+			mobile: 0,
+			desktop: 1280,
+		},
+	},
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

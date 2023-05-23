@@ -49,16 +49,17 @@ export function SearchComponent() {
 					alignItems: "center",
 					width: 340,
 					height: "40px",
+					borderRadius: "14px",
 				}}
 			>
-				<Box sx={{ mt: 1 }}>
-					<MdSearch style={{ width: "40px", height: "30px" }} />
+				<Box sx={{ mt: 0.7 }}>
+					<MdSearch style={{ width: "40px", height: "24px" }} />
 				</Box>
 				{/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" /> */}
 				<InputBase
-					sx={{ ml: 1, flex: 1 }}
-					placeholder="Search videos ..."
-					inputProps={{ "aria-label": "search videos ..." }}
+					sx={{ ml: 0.5, flex: 1, fontSize: "14px" }}
+					placeholder="Search"
+					inputProps={{ "aria-label": "search" }}
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 				/>

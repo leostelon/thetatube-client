@@ -114,7 +114,7 @@ export default function LeftDrawer({ smaller }) {
 
 	return (
 		<Drawer variant="permanent" open={smaller ? false : open}>
-			<Box sx={{ mt: 3 }}>
+			<Box sx={{ mt: 2 }}>
 				<Box
 					sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
 					// onClick={() => {

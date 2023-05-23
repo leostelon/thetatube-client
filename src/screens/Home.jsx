@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import styled from "styled-components";
 import "../styles/Home.css";
 import React, { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
 import { useNavigate } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const Home = () => {
 	const [videos, setVideos] = useState([]);
@@ -30,56 +31,78 @@ export const Home = () => {
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<VideoCardHolder>
+				// <InfiniteScroll
+				// 	dataLength={videos?.length}
+				// 	// next={() => getUserAssets(userAddress)}
+				// 	// hasMore={true}
+				// 	loader={<p></p>}
+				// 	style={{ overflowX: "clip" }}
+				// >
+				<Grid
+					container
+					sx={{ p: 2, width: "100%" }}
+					// spacing={{ xs: 2, md: 3 }}
+					// columns={{ xs: 2, sm: 8, md: 10, lg: 10, xl: 15 }}
+				>
 					{videos.map((vid, i) => {
 						let v = vid.data;
 						return (
-							<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-								<CardThumNail>
-									<img
-										src={
-											"/images/wall2.jpg"
-											// v.thumbnail && v.thumbnail !== ""
-											// 	? v.thumbnail
-											// 	: NoImagePlaceholder
-										}
-										height="100%"
-										width="100%"
-										alt={v.id}
-										style={{ borderRadius: "10px" }}
-									/>
-								</CardThumNail>
-
-								<CardDetailsContainer>
-									<CardProfile>
+							<Grid
+								item
+								mobile={12}
+								tablet={8}
+								laptop={4}
+								key={v.id}
+								sx={{ height: "320px", width: "340px" }}
+							>
+								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
+									<CardThumNail>
 										<img
 											src={
-												v.creator.profile_image &&
-												v.creator.profile_image !== ""
-													? v.creator.profile_image
-													: NoImagePlaceholder
+												"/images/wall2.jpg"
+												// v.thumbnail && v.thumbnail !== ""
+												// 	? v.thumbnail
+												// 	: NoImagePlaceholder
 											}
 											height="100%"
 											width="100%"
-											alt={v.id + v.timestamp}
-											style={{ borderRadius: "50%" }}
+											alt={v.id}
+											style={{ borderRadius: "10px" }}
 										/>
-									</CardProfile>
-									<CardDetails>
-										<CardTitle>{v.name}</CardTitle>
-										<CardSmall>{getShortAddress(v.creator.id)}</CardSmall>
-										<CardSmall>
-											{v.views} views
-											<CardSmallSpan>
-												{timeSince(new Date(v.timestamp))} ago
-											</CardSmallSpan>
-										</CardSmall>
-									</CardDetails>
-								</CardDetailsContainer>
-							</VideoCard>
+									</CardThumNail>
+
+									<CardDetailsContainer>
+										<CardProfile>
+											<img
+												src={
+													v.creator.profile_image &&
+													v.creator.profile_image !== ""
+														? v.creator.profile_image
+														: NoImagePlaceholder
+												}
+												height="100%"
+												width="100%"
+												alt={v.id + v.timestamp}
+												style={{ borderRadius: "50%" }}
+											/>
+										</CardProfile>
+										<CardDetails>
+											<CardTitle>{v.name}</CardTitle>
+											<CardSmall>{getShortAddress(v.creator.id)}</CardSmall>
+											<CardSmall>
+												{v.views} views
+												<CardSmallSpan>
+													{timeSince(new Date(v.timestamp))} ago
+												</CardSmallSpan>
+											</CardSmall>
+										</CardDetails>
+									</CardDetailsContainer>
+								</VideoCard>
+							</Grid>
 						);
 					})}
-				</VideoCardHolder>
+				</Grid>
+				// </InfiniteScroll>
 			)}
 		</Box>
 	);
@@ -92,9 +115,9 @@ const VideoCardHolder = styled.div`
 `;
 
 const VideoCard = styled.div`
-	/* height: 360px; */
+	/* flex: 1;
 	height: 320px;
-	width: 340px;
+	width: 340px; */
 	/* background-color: black; */
 
 	/* background: rgb(221, 221, 221);

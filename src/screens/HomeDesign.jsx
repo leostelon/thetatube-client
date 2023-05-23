@@ -23,7 +23,8 @@ export default function HomeDesign() {
 				<TopNavbar />
 				<Box sx={{ p: 3 }}>{Banner()}</Box>
 
-				<CardHeader>Explore</CardHeader>
+				<CardHeader sx={{ mb: 2 }}>Explore</CardHeader>
+
 				<Home />
 			</Box>
 		</Box>

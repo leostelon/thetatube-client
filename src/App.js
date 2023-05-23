@@ -8,6 +8,7 @@ import Profile from "./screens/Profile";
 import HomeDesign from "./screens/HomeDesign";
 import ProfileDesign from "./screens/ProfileDesign";
 import { VideoDesign } from "./screens/VideoDesign";
+import UploadDesign from "./screens/UploadDesign";
 
 function App() {
 	return (
@@ -16,7 +17,8 @@ function App() {
 				<div>
 					<Routes>
 						{/* <Route path="/" exact element={<Home />} /> */}
-						<Route path="/upload" exact element={<Upload />} />
+						<Route path="/upload" exact element={<UploadDesign />} />
+						<Route path="/v1/upload" exact element={<Upload />} />
 						<Route path="/profile/:userAddress" exact element={<Profile />} />
 						<Route path="/video/:videoId" exact element={<Video />} />
 						<Route path="/video" exact element={<VideoDesign />} />
