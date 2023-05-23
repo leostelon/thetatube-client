@@ -213,7 +213,7 @@ const UploadBox = () => {
 								}}
 							/>
 						</Button>
-						<Button
+						<ColorButton
 							variant="contained"
 							color={"secondary"}
 							sx={{ m: 1 }}
@@ -224,7 +224,7 @@ const UploadBox = () => {
 							) : (
 								"Upload Video"
 							)}
-						</Button>
+						</ColorButton>
 					</Box>
 				</Box>
 				{videoFilePreview && (
@@ -281,3 +281,11 @@ const IconButtonHolder = styled(IconButton)({
 
 	marginRight: "8px",
 });
+
+const ColorButton = styled(Button)(() => ({
+	backgroundColor: "#e1b24b",
+	"&:hover": {
+		backgroundColor: "#d2a033",
+	},
+	marginRight: "8px",
+}));

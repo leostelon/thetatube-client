@@ -29,7 +29,7 @@ const drawerWidth = 260;
 const mainList = [
 	{ text: "Home", icon: () => <AiOutlineHome />, path: "/" },
 	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/explore" },
-	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live" },
+	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live", upcomming: true },
 	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
 	{ text: "Profile", icon: () => <MdOutlinePersonOutline />, path: "/profile" },
 	{
@@ -130,7 +130,7 @@ export default function LeftDrawer({ smaller }) {
 				</Box>
 
 				<List>
-					{mainList.map(({ text, icon, path }, i) => (
+					{mainList.map(({ text, icon, path, upcomming }, i) => (
 						<ListItem
 							key={text}
 							disablePadding
@@ -140,7 +140,7 @@ export default function LeftDrawer({ smaller }) {
 									background: "rgb(38 38 38 / 87%)",
 								},
 							}}
-							onClick={() => navigate(path)}
+							onClick={() => (upcomming ? "" : navigate(path))}
 						>
 							<ListItemButton
 								sx={{
@@ -171,6 +171,11 @@ export default function LeftDrawer({ smaller }) {
 									{icon()}
 								</ListItemIcon>
 								<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+								{/* <Box
+									sx={{ fontSize: "10px", position: "absolute", right: "38%" }}
+								>
+									{upcomming && "soon"}
+								</Box> */}
 							</ListItemButton>
 						</ListItem>
 					))}

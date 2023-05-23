@@ -19,6 +19,7 @@ import TopNavbar from "../components/TopNavbar";
 import LeftDrawer from "../components/LeftDrawer";
 
 import wall from "../assets/wall2.jpg";
+import prof from "../assets/profileBack.jpg";
 import { AiOutlineEye } from "react-icons/ai";
 
 export function VideoDesign() {
@@ -88,6 +89,7 @@ const VideoBox = () => {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
+					pl: 3,
 				}}
 			>
 				{/* {loading ? (
@@ -204,10 +206,25 @@ const VideoBox = () => {
 											{/* {v.name && v.name} */}
 											Video Name
 										</RecommendedTitle>
-										<RecommendedSmall>
-											{/* {v.creator?.id && getShortAddress(v.creator.id)} */}
-											owner
-										</RecommendedSmall>
+										<Box sx={{ display: "flex", alignItems: "center" }}>
+											<Box
+												sx={{
+													height: "20px",
+													width: "20px",
+													borderRadius: "2px",
+													backgroundImage: `url(${prof})`,
+													backgroundRepeat: "no-repeat",
+													backgroundSize: "cover",
+													backgroundPosition: "center",
+
+													mr: 1,
+												}}
+											></Box>
+											<RecommendedSmall>
+												{/* {v.creator?.id && getShortAddress(v.creator.id)} */}
+												owner
+											</RecommendedSmall>
+										</Box>
 										<RecommendedSmall
 											style={{
 												display: "flex",
@@ -247,10 +264,10 @@ const ViewGridContainer = styled.div`
 
 const VideoContainer = styled.div`
 	flex-grow: 1;
-	/* aspect-ratio: 16 / 9; */
-	aspect-ratio: 8 / 5;
-	min-width: 660px;
-	max-height: 70vh;
+	aspect-ratio: 16 / 9;
+	/* aspect-ratio: 8 / 5; */
+	min-width: 630px;
+	max-height: 60vh;
 
 	padding-right: 24px;
 
@@ -377,11 +394,8 @@ const RecommendedSmallSpan = styled.span`
 	}
 `;
 
-const ColorButton = muiStyled(Button)(({ theme }) => ({
-	// color: theme.palette.getContrastText(grey[300]),
-	// backgroundColor: deepOrange[500],
+const ColorButton = muiStyled(Button)(() => ({
 	backgroundColor: "#e1b24b",
-	// contrastText: black,
 	"&:hover": {
 		backgroundColor: "#d2a033",
 	},

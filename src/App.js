@@ -9,6 +9,7 @@ import HomeDesign from "./screens/HomeDesign";
 import ProfileDesign from "./screens/ProfileDesign";
 import { VideoDesign } from "./screens/VideoDesign";
 import UploadDesign from "./screens/UploadDesign";
+import Premium from "./screens/Premium";
 
 function App() {
 	return (
@@ -25,6 +26,7 @@ function App() {
 						{/*  */}
 						<Route path="/" exact element={<HomeDesign />} />
 						<Route path="/profile" exact element={<ProfileDesign />} />
+						<Route path="/Premium" exact element={<Premium />} />
 					</Routes>
 				</div>
 			</AppStyled>
