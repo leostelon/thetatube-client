@@ -1,6 +1,7 @@
 const { db } = require(".");
 const jwt = require("jsonwebtoken");
 const { getWalletAddress } = require("../utils/wallet");
+const { pinFileToIPFS } = require("../api/nftStorage");
 
 const collectionReference = db.collection("User");
 
@@ -64,4 +65,25 @@ const enableSubscription = async function (contractAddress) {
 	}
 };
 
-module.exports = { createToken, createUser, getUser, enableSubscription };
+const updateProfilePic = async function (file) {
+	try {
+		// Upload thumbnail
+		const imageResponse = await pinFileToIPFS(file);
+
+		const userAddress = await getWalletAddress();
+		const response = await collectionReference
+			.record(userAddress)
+			.call("updateProfileImage", [imageResponse]);
+		return response.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+module.exports = {
+	createToken,
+	createUser,
+	getUser,
+	enableSubscription,
+	updateProfilePic,
+};
