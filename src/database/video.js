@@ -61,3 +61,13 @@ export async function getVideo(videoId) {
 		console.log(error.message);
 	}
 }
+
+export async function searchVideos(search) {
+	try{
+		const results = await collectionReference.where("name", ">=", search).get();
+		
+		return results.data;
+	}catch(error) {
+		console.log(error.message)
+	}
+}
