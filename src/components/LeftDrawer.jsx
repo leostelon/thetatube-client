@@ -103,6 +103,8 @@ export default function LeftDrawer({ smaller }) {
 				return setIndex(3);
 			case "/profile":
 				return setIndex(4);
+			case "/premium":
+				return setIndex(5);
 			default:
 				setIndex(0);
 		}

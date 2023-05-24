@@ -86,7 +86,7 @@ export default function JoinSubscription({
 					sx={{
 						p: 2,
 						// textAlign: "center",
-						width: "100%",
+						// width: "100%",
 						backgroundColor: "#46505a",
 						color: "white",
 					}}
