@@ -4,7 +4,7 @@ import { MdNotificationsNone, MdAccountCircle } from "react-icons/md";
 
 export default function TopNavbar() {
 	return (
-		<NavHolder sx={{ px: 2, pt: 4 }}>
+		<NavHolder sx={{ px: 2, pt: 1 }}>
 			<Box>
 				<SearchComponent />
 			</Box>

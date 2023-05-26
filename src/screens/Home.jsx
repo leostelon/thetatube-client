@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import styled from "styled-components";
 import "../styles/Home.css";
 import React, { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
 import { useNavigate } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { VideosLoading } from "../components/VideosLoading";
 
 export const Home = () => {
 	const [videos, setVideos] = useState([]);
@@ -29,21 +29,9 @@ export const Home = () => {
 		<Box>
 			{/* <Navbar /> */}
 			{loading ? (
-				<CircularProgress />
+				<VideosLoading />
 			) : (
-				// <InfiniteScroll
-				// 	dataLength={videos?.length}
-				// 	// next={() => getUserAssets(userAddress)}
-				// 	// hasMore={true}
-				// 	loader={<p></p>}
-				// 	style={{ overflowX: "clip" }}
-				// >
-				<Grid
-					container
-					sx={{ p: 2, width: "100%" }}
-					// spacing={{ xs: 2, md: 3 }}
-					// columns={{ xs: 2, sm: 8, md: 10, lg: 10, xl: 15 }}
-				>
+				<Grid container sx={{ p: 2, width: "100%" }}>
 					{videos.map((vid, i) => {
 						let v = vid.data;
 						return (
@@ -56,20 +44,26 @@ export const Home = () => {
 								sx={{ height: "320px", width: "340px" }}
 							>
 								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-									<CardThumNail>
-										<img
-											src={
-												"/images/wall2.jpg"
-												// v.thumbnail && v.thumbnail !== ""
-												// 	? v.thumbnail
-												// 	: NoImagePlaceholder
-											}
-											height="100%"
-											width="100%"
-											alt={v.id}
-											style={{ borderRadius: "10px" }}
-										/>
-									</CardThumNail>
+									<Box
+										sx={{
+											width: "100%",
+											height: "200px",
+											backgroundPosition: "center",
+											backgroundRepeat: "no-repeat",
+											borderRadius: "6px",
+											border: "none",
+											backgroundSize: "cover",
+											backgroundImage: `url("${
+												v.thumbnail && v.thumbnail !== ""
+													? v.thumbnail
+													: NoImagePlaceholder
+											}")`,
+										}}
+										onError={({ currentTarget }) => {
+											currentTarget.onerror = null; // prevents looping
+											currentTarget.src = NoImagePlaceholder;
+										}}
+									></Box>
 
 									<CardDetailsContainer>
 										<CardProfile>
@@ -108,11 +102,11 @@ export const Home = () => {
 	);
 };
 
-const VideoCardHolder = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-`;
+// const VideoCardHolder = styled.div`
+// 	display: flex;
+// 	flex-wrap: wrap;
+// 	justify-content: space-evenly;
+// `;
 
 const VideoCard = styled.div`
 	/* flex: 1;
@@ -133,11 +127,6 @@ const VideoCard = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
-`;
-
-const CardThumNail = styled.div`
-	width: 100%;
-	height: 200px;
 `;
 
 const CardDetailsContainer = styled.div`

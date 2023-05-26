@@ -10,11 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-	AiOutlineCloudUpload,
-	AiOutlineHome,
-	AiOutlineLogout,
-} from "react-icons/ai";
+import { AiOutlineCloudUpload, AiOutlineHome } from "react-icons/ai";
 import {
 	MdLiveTv,
 	MdOutlineExplore,
@@ -115,8 +111,19 @@ export default function LeftDrawer({ smaller }) {
 	}, [location.pathname]);
 
 	return (
-		<Drawer variant="permanent" open={smaller ? false : open}>
-			<Box sx={{ mt: 2 }}>
+		<Drawer
+			variant="permanent"
+			open={smaller ? false : open}
+			sx={{
+				mt: 2,
+			}}
+		>
+			<Box
+				sx={{
+					background:
+						"linear-gradient(145deg, rgb(182 244 146 / 81%)1%, rgb(51 139 147 / 62%)25%,rgba(0,212,255,0) 50%)",
+				}}
+			>
 				<Box
 					sx={{ p: 2, mb: 2, display: "flex", alignItems: "center" }}
 					// onClick={() => {
@@ -139,7 +146,7 @@ export default function LeftDrawer({ smaller }) {
 							sx={{
 								display: "block",
 								"&:hover": {
-									background: "rgb(38 38 38 / 87%)",
+									background: "rgb(38 38 38 / 35%)",
 								},
 							}}
 							onClick={() => (upcomming ? "" : navigate(path))}
@@ -172,7 +179,13 @@ export default function LeftDrawer({ smaller }) {
 								>
 									{icon()}
 								</ListItemIcon>
-								<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+								<ListItemText
+									primary={text}
+									sx={{
+										opacity: open ? 1 : 0,
+										fontFamily: `"Poppins", sans-serif!important`,
+									}}
+								/>
 								{/* <Box
 									sx={{ fontSize: "10px", position: "absolute", right: "38%" }}
 								>
@@ -231,16 +244,12 @@ export default function LeftDrawer({ smaller }) {
 							</ListItemIcon>
 							<ListItemText
 								primary={"Log Out"}
-								sx={
-									({ opacity: open ? 1 : 0 },
-									[
-										{
-											["&:hover"]: {
-												color: "red",
-											},
-										},
-									])
-								}
+								sx={{
+									opacity: open ? 1 : 0,
+									"&:hover": {
+										color: "red",
+									},
+								}}
 							/>
 						</ListItemButton>
 					</ListItem>
