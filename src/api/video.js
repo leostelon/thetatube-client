@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { createVideo } from "../database/video";
 import { pinFileToIPFS } from "./nftStorage";
 import { db } from "../database";
+import { getUser } from "../database/user";
 
 const VIDEO_URL = "https://api.thetavideoapi.com";
 
@@ -12,7 +13,8 @@ export async function uploadVideo(
 	thumbnail,
 	name,
 	description,
-	duration
+	duration,
+	checked
 ) {
 	try {
 		const address = localStorage.getItem("address");
@@ -27,14 +29,20 @@ export async function uploadVideo(
 		console.log(response.data.body.videos);
 		const v = response.data.body.videos[0];
 
+		// get premium contract address
+		let user;
+		if (checked) {
+			user = await getUser(address);
+		}
+
 		// Upload to polybase
 		await createVideo(
 			v.id,
 			name,
 			description,
 			db.collection("User").record(address),
-			false,
-			"",
+			checked,
+			checked ? user.premiumContractAddress : "",
 			thumbnailResponse,
 			duration
 		);
