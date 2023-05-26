@@ -1,3 +1,4 @@
+import "../styles/LeftDrawer.css";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -27,12 +28,12 @@ const mainList = [
 	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/explore" },
 	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live", upcomming: true },
 	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
-	{ text: "Profile", icon: () => <MdOutlinePersonOutline />, path: "/profile" },
 	{
-		text: "Premium Content",
+		text: "Premium",
 		icon: () => <MdOutlineWorkspacePremium />,
 		path: "/premium",
 	},
+	{ text: "Profile", icon: () => <MdOutlinePersonOutline />, path: "/profile" },
 ];
 
 const openedMixin = (theme) => ({
@@ -186,11 +187,11 @@ export default function LeftDrawer({ smaller }) {
 										fontFamily: `"Poppins", sans-serif!important`,
 									}}
 								/>
-								{/* <Box
-									sx={{ fontSize: "10px", position: "absolute", right: "38%" }}
-								>
-									{upcomming && "soon"}
-								</Box> */}
+								<Box sx={{ position: "absolute", right: "20%" }}>
+									{upcomming && (
+										<span className="premium-tag">coming soon</span>
+									)}
+								</Box>
 							</ListItemButton>
 						</ListItem>
 					))}

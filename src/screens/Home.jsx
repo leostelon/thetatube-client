@@ -8,6 +8,7 @@ import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
 import { useNavigate } from "react-router-dom";
 import { VideosLoading } from "../components/VideosLoading";
+import { Thumbnail } from "../components/Thumbnail";
 
 export const Home = () => {
 	const [videos, setVideos] = useState([]);
@@ -44,26 +45,7 @@ export const Home = () => {
 								sx={{ height: "320px", width: "340px" }}
 							>
 								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-									<Box
-										sx={{
-											width: "100%",
-											height: "200px",
-											backgroundPosition: "center",
-											backgroundRepeat: "no-repeat",
-											borderRadius: "6px",
-											border: "none",
-											backgroundSize: "cover",
-											backgroundImage: `url("${
-												v.thumbnail && v.thumbnail !== ""
-													? v.thumbnail
-													: NoImagePlaceholder
-											}")`,
-										}}
-										onError={({ currentTarget }) => {
-											currentTarget.onerror = null; // prevents looping
-											currentTarget.src = NoImagePlaceholder;
-										}}
-									></Box>
+									<Thumbnail thumbnail={v.thumbnail} />
 
 									<CardDetailsContainer>
 										<CardProfile>
