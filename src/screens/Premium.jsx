@@ -4,7 +4,7 @@ import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getVideos } from "../database/video";
+import { getPremiumVideos } from "../database/video";
 import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
@@ -29,7 +29,7 @@ export const PremiumBox = () => {
 
 	async function fetchVideos() {
 		setLoading(true);
-		const response = await getVideos();
+		const response = await getPremiumVideos();
 		setVideos(response);
 		setLoading(false);
 	}
@@ -121,11 +121,11 @@ export const PremiumBox = () => {
 	);
 };
 
-const VideoCardHolder = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-`;
+// const VideoCardHolder = styled.div`
+// 	display: flex;
+// 	flex-wrap: wrap;
+// 	justify-content: space-evenly;
+// `;
 
 const VideoCard = styled.div`
 	/* flex: 1;

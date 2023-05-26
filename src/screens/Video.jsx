@@ -1,4 +1,4 @@
-import { Box, CircularProgress,  } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useParams } from "react-router-dom";
@@ -56,7 +56,7 @@ export const Video = () => {
 
 	// Check if token already exist's
 	async function checkPremiumBought() {
-		if (!creator) return;
+		if (!window.web3 || !creator) return;
 		const currentAddress = await getWalletAddress();
 		if (!currentAddress) alert("Please connect your wallet");
 

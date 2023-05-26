@@ -1,14 +1,12 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import { Home } from "./screens/Home";
 import { Upload } from "./screens/Upload";
 import { Video } from "./screens/Video";
 import Profile from "./screens/Profile";
 import HomeDesign from "./screens/HomeDesign";
 import ProfileDesign from "./screens/ProfileDesign";
 import { VideoDesign } from "./screens/VideoDesign";
-import UploadDesign from "./screens/UploadDesign";
 import Premium from "./screens/Premium";
 
 function App() {
@@ -18,8 +16,7 @@ function App() {
 				<div>
 					<Routes>
 						{/* <Route path="/" exact element={<Home />} /> */}
-						<Route path="/upload" exact element={<UploadDesign />} />
-						<Route path="/v1/upload" exact element={<Upload />} />
+						<Route path="/upload" exact element={<Upload />} />
 						<Route path="/profile/:userAddress" exact element={<Profile />} />
 						<Route path="/video/:videoId" exact element={<Video />} />
 						<Route path="/video" exact element={<VideoDesign />} />

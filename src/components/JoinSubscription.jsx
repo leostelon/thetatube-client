@@ -26,10 +26,11 @@ export default function JoinSubscription({
 				return alert("user has not enabled premium content!");
 			else setOpen(isOpen);
 		}
-	}, [isOpen, creator.premium]);
+	}, [isOpen, creator]);
 
 	useEffect(() => {
 		const getInitialDetails = async () => {
+			if (!window.web3) return;
 			const contract = new window.web3.eth.Contract(
 				ThetaTubeInterface.abi,
 				creator.premiumContractAddress
@@ -55,7 +56,7 @@ export default function JoinSubscription({
 		};
 
 		getInitialDetails();
-	}, [creator.premiumContractAddress]);
+	}, [isOpen, creator.premiumContractAddress]);
 
 	async function joinPremium() {
 		if (!transferDetails) return alert("Try Again!");
