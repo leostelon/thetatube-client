@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress,  } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useParams } from "react-router-dom";
@@ -15,6 +15,13 @@ import { getShortAddress } from "../utils/addressShort";
 import { getWalletAddress } from "../utils/wallet";
 import ThetaTubeInterface from "../contracts/ThetaTube.json";
 import JoinSubscription from "../components/JoinSubscription";
+import {
+	AiFillDislike,
+	AiFillLike,
+	AiOutlineDislike,
+	AiOutlineLike,
+} from "react-icons/ai";
+import { createLike, getVideoLike, toggleLiked } from "../database/like";
 
 export const Video = () => {
 	const [loading, setLoading] = useState(true);
@@ -23,6 +30,9 @@ export const Video = () => {
 	const [creator, setCreator] = useState();
 	const [videos, setVideos] = useState([]);
 	const [boughtPremium, setBoughtPremium] = useState(false);
+	const currentLoggedUser = localStorage.getItem("address");
+	const [totalLiked, setTotalLiked] = useState(0);
+	const [userLikes, setUserLiked] = useState(false);
 
 	const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
 
@@ -41,6 +51,7 @@ export const Video = () => {
 			checkPremiumBought();
 		}
 		setLoading(false);
+		getLikesData();
 	}
 
 	// Check if token already exist's
@@ -55,6 +66,22 @@ export const Video = () => {
 		);
 		const balance = await contract.methods.balanceOf(currentAddress).call();
 		if (parseInt(balance) > 0) setBoughtPremium(true);
+	}
+
+	async function handleLike(like) {
+		if (currentLoggedUser === "" || currentLoggedUser === undefined) return;
+		if (userLikes === undefined) {
+			await createLike(like, videoId, currentLoggedUser);
+		} else {
+			await toggleLiked(userLikes.data.id, like);
+		}
+		getLikesData();
+	}
+
+	async function getLikesData() {
+		const res = await getVideoLike(videoId, currentLoggedUser);
+		setTotalLiked(res.likes);
+		setUserLiked(res.userLiked);
 	}
 
 	useEffect(() => {
@@ -127,6 +154,50 @@ export const Video = () => {
 											boughtPremium ? "Premium Subscriber" : "Join Premium"
 										}
 									</ColorButton>
+									<Box
+										sx={{
+											display: "flex",
+											borderRadius: "5%",
+											border: "0.5px solid lightgrey",
+											padding: 0.5,
+										}}
+									>
+										<Box
+											sx={{
+												fontWeight: "500",
+												display: "flex",
+												borderRight: "1px solid lightgrey",
+												px: 1,
+												cursor: "pointer",
+											}}
+											onClick={() => handleLike(true)}
+										>
+											{userLikes === undefined ? (
+												<AiOutlineLike size={24} />
+											) : userLikes?.data?.liked ? (
+												<AiFillLike size={24} />
+											) : (
+												<AiOutlineLike size={24} />
+											)}
+											&nbsp; {totalLiked}
+										</Box>
+										<Box
+											sx={{
+												display: "flex",
+												px: 1,
+												cursor: "pointer",
+											}}
+											onClick={() => handleLike(false)}
+										>
+											{userLikes === undefined ? (
+												<AiOutlineDislike size={24} />
+											) : !userLikes?.data?.liked ? (
+												<AiFillDislike size={24} />
+											) : (
+												<AiOutlineDislike size={24} />
+											)}
+										</Box>
+									</Box>
 									<JoinSubscription
 										isOpen={joinSubscriptionOpen}
 										handleExternalClose={setJoinSubscriptionOpen}

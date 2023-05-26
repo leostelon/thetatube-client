@@ -30,12 +30,31 @@ export async function getLiked(userAddress) {
 	}
 }
 
-export async function toggleLiked(likeId) {
+export async function toggleLiked(likeId, likeType) {
 	try {
 		const response = await collectionReference
 			.record(likeId)
-			.call("toggleLiked", []);
+			.call("toggleLiked", [likeType]);
 		return response.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+}
+
+export async function getVideoLike(videoId, userAddress) {
+	try {
+		const likes = await collectionReference
+			.where("liked", "==", true)
+			.where("videoId", "==", videoId)
+			.get();
+
+		const userLikedRes = await collectionReference
+			.where("user", "==", userAddress)
+			.where("videoId", "==", videoId)
+			.limit(1)
+			.get();
+
+		return { userLiked: userLikedRes.data[0], likes: likes.data.length };
 	} catch (error) {
 		console.log(error.message);
 	}
