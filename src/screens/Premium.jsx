@@ -8,6 +8,7 @@ import { getPremiumVideos } from "../database/video";
 import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
+import { Thumbnail } from "../components/Thumbnail";
 
 export default function Premium() {
 	return (
@@ -69,20 +70,7 @@ export const PremiumBox = () => {
 								sx={{ height: "320px", width: "340px" }}
 							>
 								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-									<CardThumNail>
-										<img
-											src={
-												"/images/wall2.jpg"
-												// v.thumbnail && v.thumbnail !== ""
-												// 	? v.thumbnail
-												// 	: NoImagePlaceholder
-											}
-											height="100%"
-											width="100%"
-											alt={v.id}
-											style={{ borderRadius: "10px" }}
-										/>
-									</CardThumNail>
+									<Thumbnail thumbnail={v.thumbnail} />
 
 									<CardDetailsContainer>
 										<CardProfile>
@@ -146,11 +134,6 @@ const VideoCard = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
-`;
-
-const CardThumNail = styled.div`
-	width: 100%;
-	height: 200px;
 `;
 
 const CardDetailsContainer = styled.div`

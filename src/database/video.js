@@ -64,7 +64,7 @@ export async function getVideo(videoId) {
 
 export async function searchVideos(search) {
 	try {
-		const results = await collectionReference.where("name", ">=", search).get();
+		const results = await collectionReference.where("name", ">=", search).where('name', '<', `${search}\uFFFF`).get();
 
 		return results.data;
 	} catch (error) {

@@ -2,7 +2,7 @@ import "./search.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { MdSearch } from "react-icons/md";
-import { Divider, IconButton, InputBase, Paper } from "@mui/material";
+import { InputBase, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 
 export function SearchComponent() {
@@ -12,35 +12,12 @@ export function SearchComponent() {
 	const handleKeyDown = (event) => {
 		const value = event.target.value;
 		if (event.key === "Enter" && value !== "") {
-			navigate(`/explore?query=${value}`);
-		}
-	};
-
-	const onSearch = (event) => {
-		if (input !== "") {
-			navigate(`/explore?query=${input}`);
+			navigate(`/browse?&query=${value}`);
 		}
 	};
 
 	return (
 		<div>
-			{/* <div className="search-container">
-				<TbSearch
-					onClick={onSearch}
-					color="grey"
-					cursor={"pointer"}
-					size={18}
-				/>
-				<input
-					type="search"
-					id="search"
-					onKeyDown={handleKeyDown}
-					placeholder="Search..."
-					value={input}
-					onInput={(e) => setInput(e.target.value)}
-				/>
-			</div> */}
-
 			<Paper
 				component="form"
 				sx={{
@@ -61,7 +38,8 @@ export function SearchComponent() {
 					placeholder="Search"
 					inputProps={{ "aria-label": "search" }}
 					value={input}
-					onChange={(e) => setInput(e.target.value)}
+					onInput={(e) => setInput(e.target.value)}
+					onKeyDown={handleKeyDown}
 				/>
 			</Paper>
 		</div>

@@ -1,0 +1,14 @@
+.premium-tag {
+	font-size: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	background: linear-gradient(-45deg, #35ffd3, #25caa6, #1f9b80, #1e816c);
+	border-radius: 4px;
+	color: white;
+	animation: hue 5s ease-in-out infinite;
+	-moz-animation: hue 5s ease-in-out infinite;
+	-webkit-animation: hue 5s ease-in-out infinite;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
