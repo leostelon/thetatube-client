@@ -143,6 +143,7 @@ export const Video = () => {
 											</RecommendedSmallSpan>
 										</VideoOwnerSubs>
 									</VideoDetails>
+
 									<ColorButton
 										variant="contained"
 										onClick={() => setJoinSubscriptionOpen(true)}

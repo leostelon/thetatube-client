@@ -124,7 +124,11 @@ const VideoBox = () => {
 									disLikes={"100"}
 								/>
 
-								<VideoGridContainer>
+								<VideoGridContainer
+									style={{
+										position: "relative",
+									}}
+								>
 									<VideoProfile>
 										<img
 											src="/images/wall.jpg"
@@ -148,6 +152,10 @@ const VideoBox = () => {
 									<ColorButton
 										variant="contained"
 										onClick={() => setJoinSubscriptionOpen(true)}
+										style={{
+											position: "absolute",
+											right: 0,
+										}}
 									>
 										{
 											// premiumLoading ? (
