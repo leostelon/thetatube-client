@@ -25,7 +25,7 @@ const drawerWidth = 260;
 
 const mainList = [
 	{ text: "Home", icon: () => <AiOutlineHome />, path: "/" },
-	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/explore" },
+	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/browse" },
 	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live", upcomming: true },
 	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
 	{
