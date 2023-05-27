@@ -27,7 +27,11 @@ const mainList = [
 	{ text: "Home", icon: () => <AiOutlineHome />, path: "/" },
 	{ text: "Browse", icon: () => <MdOutlineExplore />, path: "/browse" },
 	{ text: "Live TV", icon: () => <MdLiveTv />, path: "/live", upcomming: true },
-	{ text: "Upload", icon: () => <AiOutlineCloudUpload />, path: "/upload" },
+	{
+		text: "Upload",
+		icon: () => <AiOutlineCloudUpload />,
+		path: "/upload",
+	},
 	{
 		text: "Premium",
 		icon: () => <MdOutlineWorkspacePremium />,
@@ -150,7 +154,14 @@ export default function LeftDrawer({ smaller }) {
 									background: "rgb(38 38 38 / 35%)",
 								},
 							}}
-							onClick={() => (upcomming ? "" : navigate(path))}
+							onClick={() => {
+								if (path === "/profile") {
+									const address = localStorage.getItem("address");
+									return navigate("/profile/" + address);
+								} else {
+									return upcomming ? "" : navigate(path);
+								}
+							}}
 						>
 							<ListItemButton
 								sx={{
@@ -213,7 +224,10 @@ export default function LeftDrawer({ smaller }) {
 								background: "rgb(38 38 38 / 87%)",
 							},
 						}}
-						// onClick={() => navigate(path)}
+						onClick={() => {
+							localStorage.clear();
+							window.location.replace("/");
+						}}
 					>
 						<ListItemButton
 							sx={{

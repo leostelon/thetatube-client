@@ -18,12 +18,16 @@ function App() {
 					<Routes>
 						{/* <Route path="/" exact element={<Home />} /> */}
 						<Route path="/upload" exact element={<Upload />} />
-						<Route path="/profile/:userAddress" exact element={<Profile />} />
+						{/* <Route path="/profile/:userAddress" exact element={<Profile />} /> */}
 						{/* <Route path="/video/:videoId" exact element={<Video />} /> */}
 						<Route path="/video/:videoId" exact element={<VideoDesign />} />
 						{/*  */}
 						<Route path="/" exact element={<HomeDesign />} />
-						<Route path="/profile" exact element={<ProfileDesign />} />
+						<Route
+							path="/profile/:userAddress"
+							exact
+							element={<ProfileDesign />}
+						/>
 						<Route path="/browse" exact element={<Browse />} />
 						<Route path="/Premium" exact element={<Premium />} />
 					</Routes>

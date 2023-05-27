@@ -67,14 +67,15 @@ export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 	}, [isOpen]);
 
 	return (
-		<Dialog open={open} fullWidth maxWidth="xs" onClose={handleClose}>
+		<Dialog open={open} maxWidth="xs" onClose={handleClose}>
 			<Box
 				sx={{
 					p: 2,
 					// textAlign: "center",
 					width: "100%",
-					backgroundColor: "#46505a",
+					backgroundColor: "#1e1e1e",
 					color: "white",
+					maxWidth: "350px",
 				}}
 			>
 				<Box>

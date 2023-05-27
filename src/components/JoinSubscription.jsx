@@ -82,7 +82,7 @@ export default function JoinSubscription({
 	}
 	return (
 		<div>
-			<Dialog open={open} fullWidth maxWidth="xs" onClose={handleClose}>
+			<Dialog open={open} maxWidth="xs" onClose={handleClose}>
 				<Box
 					sx={{
 						p: 2,

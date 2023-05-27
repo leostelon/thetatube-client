@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
-import { Button, IconButton, styled } from "@mui/material";
+import { Button, CircularProgress, IconButton, styled } from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
 import { BsCardImage } from "react-icons/bs";
@@ -13,6 +13,11 @@ import bannerImage from "../assets/wall3.jpg";
 import profileDp from "../assets/girlDP.jpg";
 import { purple, teal } from "@mui/material/colors";
 import { Home } from "./Home";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getUser } from "../database/user";
+import { getShortAddress } from "../utils/addressShort";
+import { EnableSubscription } from "../components/EnableSubscription";
 
 export default function ProfileDesign() {
 	return (
@@ -29,44 +34,85 @@ export default function ProfileDesign() {
 }
 
 const ProfileBox = () => {
+	const [user, setUser] = useState();
+	const [userLoading, setUserLoading] = useState(true);
+	const { userAddress } = useParams();
+	const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+	const navigate = useNavigate();
+
+	function handleTokenDialogClose() {
+		setSubscriptionOpen(false);
+	}
+
+	async function getUserFromDB(address) {
+		setUserLoading(true);
+		const response = await getUser(address);
+		setUser(response);
+		setUserLoading(false);
+	}
+
+	useEffect(() => {
+		getUserFromDB(userAddress);
+	}, [userAddress]);
 	return (
 		<>
-			<ProfileBanner>
-				<ChangeProfileBanner>
-					<IconButtonHolder
-						sx={{
-							color: "white",
-							backgroundColor: "#191C22",
-							borderRadius: "5px",
-						}}
-					>
-						<RiImageEditLine />
-					</IconButtonHolder>
-					<IconButtonHolder>
-						<BsCardImage />
-					</IconButtonHolder>
-				</ChangeProfileBanner>
-			</ProfileBanner>
-			<ProfileDetailsContainer sx={{ px: 3, pt: 2, pb: 3 }}>
-				<ProfileDetailsContainerLeft>
-					<ProfileImage></ProfileImage>
-					<OwnerDetails>
-						<h1>Shella Madrim</h1>
-						<h4>3480 folowers</h4>
-					</OwnerDetails>
-				</ProfileDetailsContainerLeft>
-				<ProfileDetailsContainerRight>
-					<Box>
-						<PurpleColorButton variant="contained" startIcon={<MdVideoFile />}>
-							Upload New Videos
-						</PurpleColorButton>
-					</Box>
-					<Box sx={{ marginRight: "20px" }}>
-						<ColorButton variant="contained">Subscribe</ColorButton>
-					</Box>
-				</ProfileDetailsContainerRight>
-			</ProfileDetailsContainer>
-			{/* <Box sx={{ p: 3 }}></Box> */}
+			{" "}
+			{userLoading ? (
+				<CircularProgress />
+			) : (
+				<>
+					<ProfileBanner>
+						<ChangeProfileBanner>
+							<IconButtonHolder
+								sx={{
+									color: "white",
+									backgroundColor: "#191C22",
+									borderRadius: "5px",
+								}}
+							>
+								<RiImageEditLine />
+							</IconButtonHolder>
+							<IconButtonHolder>
+								<BsCardImage />
+							</IconButtonHolder>
+						</ChangeProfileBanner>
+					</ProfileBanner>
+					<ProfileDetailsContainer sx={{ px: 3, pt: 2, pb: 3 }}>
+						<ProfileDetailsContainerLeft>
+							<ProfileImage></ProfileImage>
+							<OwnerDetails>
+								<h1>{getShortAddress(user.id)}</h1>
+								<h4>{user.username ? `@${user.username}` : "unKnown User"}</h4>
+							</OwnerDetails>
+						</ProfileDetailsContainerLeft>
+						<ProfileDetailsContainerRight>
+							<Box>
+								<PurpleColorButton
+									variant="contained"
+									startIcon={<MdVideoFile />}
+									onClick={() => {
+										navigate("/upload");
+									}}
+								>
+									Upload New Videos
+								</PurpleColorButton>
+							</Box>
+							<Box sx={{ marginRight: "20px" }}>
+								<ColorButton
+									variant="contained"
+									onClick={() => setSubscriptionOpen(true)}
+								>
+									Enable subscription
+								</ColorButton>
+							</Box>
+						</ProfileDetailsContainerRight>
+						<EnableSubscription
+							isOpen={subscriptionOpen}
+							handleExternalClose={handleTokenDialogClose}
+						/>
+					</ProfileDetailsContainer>
+				</>
+			)}
 		</>
 	);
 };
@@ -137,7 +183,7 @@ const ProfileDetailsContainerRight = styled(Box)({
 	justifyContent: "space-between",
 	alignItems: "flex-end",
 
-	minWidth: "400px",
+	minWidth: "450px",
 	minHeight: "80px",
 });
 
