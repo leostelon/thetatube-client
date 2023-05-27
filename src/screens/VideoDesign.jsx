@@ -1,4 +1,4 @@
-import { Box, CircularProgress, CssBaseline } from "@mui/material";
+import { Box, CircularProgress, CssBaseline, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,6 @@ import { getVideo, getVideos } from "../database/video";
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { deepOrange } from "@mui/material/colors";
 
 import { timeSince } from "../utils/time";
 import { getUser } from "../database/user";
@@ -18,9 +17,10 @@ import JoinSubscription from "../components/JoinSubscription";
 import TopNavbar from "../components/TopNavbar";
 import LeftDrawer from "../components/LeftDrawer";
 
-import wall from "../assets/wall2.jpg";
 import prof from "../assets/profileBack.jpg";
-import { AiOutlineEye } from "react-icons/ai";
+
+import imageNot from "../assets/No-Image-Placeholder.png";
+import { AiFillDislike, AiFillLike, AiOutlineEye } from "react-icons/ai";
 
 export function VideoDesign() {
 	return (
@@ -36,50 +36,52 @@ export function VideoDesign() {
 }
 
 const VideoBox = () => {
-	// const [loading, setLoading] = useState(true);
-	// // const [premiumLoading, setPremiumLoading] = useState(false);
-	// const [video, setVideo] = useState();
-	// const [creator, setCreator] = useState();
-	// const [videos, setVideos] = useState([]);
-	// const [boughtPremium, setBoughtPremium] = useState(false);
+	const [loading, setLoading] = useState(true);
+	// const [premiumLoading, setPremiumLoading] = useState(false);
+	const [video, setVideo] = useState();
+	const [creator, setCreator] = useState();
+	const [videos, setVideos] = useState([]);
+	const [boughtPremium, setBoughtPremium] = useState(false);
 
-	// const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
+	const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
 
-	// const { videoId } = useParams();
+	const { videoId } = useParams();
 
-	// async function getVideoFromId(videoId) {
-	// 	setLoading(true);
-	// 	const response = await getVideo(videoId);
-	// 	setVideo(response);
-	// 	const Videos = await getVideos();
-	// 	setVideos(Videos);
+	async function getVideoFromId(videoId) {
+		setLoading(true);
+		const response = await getVideo(videoId);
+		setVideo(response);
+		const Videos = await getVideos();
+		setVideos(Videos);
 
-	// 	if (response?.creator?.collectionId) {
-	// 		const creator = await getUser(response.creator.id);
-	// 		setCreator(creator);
-	// 		checkPremiumBought();
-	// 	}
-	// 	setLoading(false);
-	// }
+		if (response?.creator?.collectionId) {
+			const creator = await getUser(response.creator.id);
+			setCreator(creator);
+			checkPremiumBought();
+		}
+		setLoading(false);
+	}
 
-	// // Check if token already exist's
-	// async function checkPremiumBought() {
-	// 	if (!creator) return;
-	// 	const currentAddress = await getWalletAddress();
-	// 	if (!currentAddress) alert("Please connect your wallet");
+	// Check if token already exist's
+	async function checkPremiumBought() {
+		if (!creator) return;
+		const currentAddress = await getWalletAddress();
+		// if (!currentAddress) alert("Please connect your wallet");
 
-	// 	const contract = new window.web3.eth.Contract(
-	// 		ThetaTubeInterface.abi,
-	// 		creator.premiumContractAddress
-	// 	);
-	// 	const balance = await contract.methods.balanceOf(currentAddress).call();
-	// 	if (parseInt(balance) > 0) setBoughtPremium(true);
-	// }
+		const contract = new window.web3.eth.Contract(
+			ThetaTubeInterface.abi,
+			creator.premiumContractAddress
+		);
+		const balance = await contract.methods.balanceOf(currentAddress).call();
+		if (parseInt(balance) > 0) setBoughtPremium(true);
+	}
 
-	// useEffect(() => {
-	// 	getVideoFromId(videoId);
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [videoId]);
+	useEffect(() => {
+		getVideoFromId(videoId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [videoId]);
+
+	console.log(creator, videos, video);
 
 	return (
 		<Box>
@@ -92,166 +94,182 @@ const VideoBox = () => {
 					pl: 3,
 				}}
 			>
-				{/* {loading ? (
+				{loading ? (
 					<CircularProgress />
 				) : (
-					video &&
-                     ( */}
-				<ViewGridContainer>
-					<Box sx={{ mb: 3 }}>
-						<VideoContainer>
-							{/* <iframe
-								src={`https://player.thetavideoapi.com/video/video_1nt5wshd78vsar73tt51awcdkg`}
-								border="0"
-								width="100%"
-								height="100%"
-								allowFullScreen
-								// className="h-[400px] w-[100%]"
-								// title={video.id}
-								style={{ borderRadius: "20px" }}
-							/> */}
-							<img
-								src="/images/wall2.jpg"
-								alt=""
-								srcSet=""
-								style={{
-									height: "100%",
-									width: "100%",
-									objectFit: "cover ",
-									// borderRadius: "50%",
-								}}
-							/>
-						</VideoContainer>
-						<VideoTitle>
-							{/* {video.name && video.name} */}
-							video name
-						</VideoTitle>
-						<VideoGridContainer>
-							<VideoProfile>
-								<img
-									src="/images/wall.jpg"
-									alt=""
-									srcSet=""
-									style={{
-										height: "100%",
-										width: "100%",
-										objectFit: "cover ",
-										borderRadius: "10px",
-									}}
+					video && (
+						<ViewGridContainer>
+							<VideoContainerBox>
+								<VideoContainer>
+									<iframe
+										// src={`https://player.thetavideoapi.com/video/video_1nt5wshd78vsar73tt51awcdkg`}
+										src={`https://player.thetavideoapi.com/video/${videoId}`}
+										border="0"
+										width="100%"
+										height="100%"
+										allowFullScreen
+										// className="h-[400px] w-[100%]"
+										// title={video.id}
+										style={{ borderRadius: "20px" }}
+									/>
+								</VideoContainer>
+
+								<VideoTitleModule
+									title={video.name && video.name}
+									views={video.views && video.views}
+									ago={
+										video.timestamp && `${timeSince(new Date(video.timestamp))}`
+									}
+									likes={"457830"}
+									disLikes={"100"}
 								/>
-							</VideoProfile>
-							<VideoDetails>
-								<VideoOwner>
-									{/* {creator?.id && getShortAddress(creator.id)} */}
-									owner
-								</VideoOwner>
-								<VideoOwnerSubs>
-									{/* {video.views && `${video.views} views`}  */}0 viewa
-									<RecommendedSmallSpan>
-										{/* {video.timestamp &&
-											`${timeSince(new Date(video.timestamp))} ago`} */}
-										4 mins ago
-									</RecommendedSmallSpan>
-								</VideoOwnerSubs>
-							</VideoDetails>
-							<ColorButton
-								variant="contained"
-								// onClick={() => setJoinSubscriptionOpen(true)}
-							>
-								{
-									// premiumLoading ? (
-									// 	<CircularProgress />
-									// ) :
-									// boughtPremium ? "Premium Subscriber" :
-									"Join Premium"
-								}
-							</ColorButton>
-							{/* <JoinSubscription */}
-							{/* // isOpen={joinSubscriptionOpen}
-							// handleExternalClose={setJoinSubscriptionOpen}
-							// creator={creator}
-							// /> */}
-							<Box>
-								{/* <RecommendedSmall>Random Chikibum</RecommendedSmall> */}
-								{/* <RecommendedSmall>
-											{video.views && `${video.views} views`}
-											<RecommendedSmallSpan>
-												{video.timestamp &&
-													`${timeSince(new Date(video.timestamp))} ago`}
-											</RecommendedSmallSpan>
-										</RecommendedSmall> */}
-							</Box>
-						</VideoGridContainer>
-						<VideoDescription>
-							{/* {video.description && video.description} */}
-							Description
-						</VideoDescription>
-					</Box>
-					<RecommendedContainer>
-						{
-							// videos?.length > 0 &&
-							// 	videos
 
-							[1, 2, 3, 4, 5, 6].map(({ data: v }) => (
-								<RecommendedBox
-								// key={v.id}
-								>
-									<RecommendedThumnail
-										style={{ backgroundImage: `url(${wall})` }}
-									>
-										<RecommendedTime>01 : 00</RecommendedTime>
-									</RecommendedThumnail>
-									<RecommendedDetailContainer>
-										<RecommendedTitle>
-											{/* {v.name && v.name} */}
-											Video Name
-										</RecommendedTitle>
-										<Box sx={{ display: "flex", alignItems: "center" }}>
-											<Box
-												sx={{
-													height: "20px",
-													width: "20px",
-													borderRadius: "2px",
-													backgroundImage: `url(${prof})`,
-													backgroundRepeat: "no-repeat",
-													backgroundSize: "cover",
-													backgroundPosition: "center",
-
-													mr: 1,
-												}}
-											></Box>
-											<RecommendedSmall>
-												{/* {v.creator?.id && getShortAddress(v.creator.id)} */}
-												owner
-											</RecommendedSmall>
-										</Box>
-										<RecommendedSmall
+								<VideoGridContainer>
+									<VideoProfile>
+										<img
+											src="/images/wall.jpg"
+											alt=""
+											srcSet=""
 											style={{
-												display: "flex",
-												// alignItems: "center",
-												// height: "10px",
+												height: "100%",
+												width: "100%",
+												objectFit: "cover ",
+												borderRadius: "10px",
 											}}
-										>
-											<AiOutlineEye style={{ margin: "2px 2px 0 0" }} />
-											{/* {v.views !== null && `${v.views} views`} */}
-											20 views
-											{/* {v.timestamp && ( */}
-											<RecommendedSmallSpan>
-												{/* {`${timeSince(new Date(v.timestamp))} ago`} */}
-												10 mins ago
-											</RecommendedSmallSpan>
-											{/* )} */}
-										</RecommendedSmall>
-									</RecommendedDetailContainer>
-								</RecommendedBox>
-							))
-						}
-					</RecommendedContainer>
-				</ViewGridContainer>
-				{/* )
-				)} */}
+										/>
+									</VideoProfile>
+									<VideoDetails>
+										<VideoOwner>
+											{creator?.id && getShortAddress(creator.id)}
+											{/* owner */}
+										</VideoOwner>
+										<VideoOwnerSubs>22.7 M Subscribers</VideoOwnerSubs>
+									</VideoDetails>
+									<ColorButton
+										variant="contained"
+										onClick={() => setJoinSubscriptionOpen(true)}
+									>
+										{
+											// premiumLoading ? (
+											// 	<CircularProgress />
+											// ) :
+											boughtPremium ? "Premium Subscriber" : "Join Premium"
+										}
+									</ColorButton>
+									<JoinSubscription
+										isOpen={joinSubscriptionOpen}
+										handleExternalClose={setJoinSubscriptionOpen}
+										creator={creator}
+									/>
+								</VideoGridContainer>
+								<VideoDescription>
+									{video.description && video.description}
+								</VideoDescription>
+							</VideoContainerBox>
+							<RecommendedContainer>
+								{videos?.length > 0 &&
+									videos.map(({ data: v }) => (
+										<RecommendedBox key={v.id}>
+											<RecommendedThumnail
+												style={{
+													backgroundImage: v.thumbnail
+														? `url("${v.thumbnail}")`
+														: `url(${imageNot})`,
+												}}
+											>
+												<RecommendedTime>
+													{v.length !== null && v.length}
+												</RecommendedTime>
+											</RecommendedThumnail>
+											<RecommendedDetailContainer>
+												<RecommendedTitle></RecommendedTitle>
+												<Box
+													sx={{
+														display: "flex",
+														alignItems: "center",
+													}}
+												>
+													<Box
+														sx={{
+															height: "20px",
+															width: "20px",
+															borderRadius: "2px",
+															backgroundImage: `url(${prof})`,
+															backgroundRepeat: "no-repeat",
+															backgroundSize: "cover",
+															backgroundPosition: "center",
+
+															mr: 1,
+														}}
+													></Box>
+													<RecommendedSmall>
+														{v.creator?.id && getShortAddress(v.creator.id)}
+													</RecommendedSmall>
+												</Box>
+												<RecommendedSmall
+													style={{
+														display: "flex",
+														// alignItems: "center",
+														// height: "10px",
+													}}
+												>
+													<AiOutlineEye style={{ margin: "2px 2px 0 0" }} />
+													{v.views !== null && `${v.views} views`}
+
+													{v.timestamp && (
+														<RecommendedSmallSpan>
+															{`${timeSince(new Date(v.timestamp))} ago`}
+														</RecommendedSmallSpan>
+													)}
+												</RecommendedSmall>
+											</RecommendedDetailContainer>
+										</RecommendedBox>
+									))}
+							</RecommendedContainer>
+						</ViewGridContainer>
+					)
+				)}
 			</Box>
 		</Box>
+	);
+};
+
+const VideoTitleModule = ({ title, views, ago, likes, disLikes }) => {
+	return (
+		<VideoTitleBox>
+			{/* {video.name && video.name} */}
+			<VideoTitle> {title}</VideoTitle>
+			<VideoOwnerSubs>
+				{/* {video.views && `${video.views} views`}  */} {views} views
+				<RecommendedSmallSpan>
+					{/* {video.timestamp &&
+                        `${timeSince(new Date(video.timestamp))} ago`} */}
+					{ago} ago
+				</RecommendedSmallSpan>
+			</VideoOwnerSubs>
+			<LikesBox>
+				{/* <LikesIconBox> */}
+				<IconButton>
+					<AiFillLike style={{ width: "22px", height: "22px" }} />
+				</IconButton>
+
+				{/* </LikesIconBox> */}
+				<Box sx={{ mr: 2 }}>{likes}</Box>
+
+				{/* <LikesIconBox> */}
+				<IconButton>
+					<AiFillDislike
+						style={{
+							width: "22px",
+							height: "22px",
+							color: "grey",
+						}}
+					/>
+				</IconButton>
+				{/* </LikesIconBox> */}
+				<Box sx={{ color: "grey" }}>{disLikes}</Box>
+			</LikesBox>
+		</VideoTitleBox>
 	);
 };
 
@@ -262,20 +280,26 @@ const ViewGridContainer = styled.div`
 
 // * video
 
-const VideoContainer = styled.div`
+const VideoContainerBox = styled.div`
 	flex-grow: 1;
+
+	min-width: 50vw;
+	margin-bottom: 20px;
+	padding-right: 30px;
+`;
+
+const VideoContainer = styled.div`
+	width: 100%;
 	aspect-ratio: 16 / 9;
-	/* aspect-ratio: 8 / 5; */
-	min-width: 630px;
-	max-height: 60vh;
-
-	padding-right: 24px;
-
 	margin-bottom: 10px;
 
 	cursor: pointer;
 `;
-
+const VideoTitleBox = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
 const VideoTitle = styled.div`
 	max-width: 900px;
 	font-size: 20px;
@@ -289,7 +313,12 @@ const VideoTitle = styled.div`
 
 	margin: 10px 0;
 
-	padding-right: 24px;
+	/* padding-right: 30px; */
+`;
+
+const LikesBox = styled.div`
+	display: flex;
+	align-items: center;
 `;
 
 const VideoGridContainer = styled.div`
@@ -307,12 +336,12 @@ const VideoProfile = styled.div`
 `;
 
 const VideoDetails = styled.div`
-	flex: 1;
-	flex-basis: 1e-9px;
+	/* flex: 1;
+	flex-basis: 1e-9px; */
 	display: flexbox;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 
 	margin-right: 24px;
 	overflow: hidden;
@@ -334,6 +363,13 @@ const VideoOwnerSubs = styled.div`
 const VideoDescription = styled.div`
 	font-size: 14px;
 	font-weight: 400;
+
+	width: 100%;
+
+	background-color: #414141;
+	padding: 10px;
+	border-radius: 10px;
+
 	/* color: #aaa; */
 `;
 // * recommended
@@ -362,6 +398,12 @@ const RecommendedDetailContainer = styled.div`
 	min-width: 226px;
 	width: 226px;
 	height: 94px;
+
+	padding: 8px 0;
+
+	display: flex;
+	justify-content: space-evenly;
+	flex-direction: column;
 `;
 
 const RecommendedTitle = styled.div`
