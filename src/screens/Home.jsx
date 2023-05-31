@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { VideosLoading } from "../components/VideosLoading";
 import { Thumbnail } from "../components/Thumbnail";
 
-export const Home = () => {
+export const Home = ({ videos: withVideos }) => {
 	const [videos, setVideos] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
@@ -23,8 +23,14 @@ export const Home = () => {
 	}
 
 	useEffect(() => {
-		fetchVideos();
-	}, []);
+		console.log("pro", withVideos);
+		if (withVideos) {
+			setVideos(withVideos);
+			setLoading(false);
+		} else fetchVideos();
+	}, [withVideos]);
+
+	console.log(videos);
 
 	return (
 		<Box>
@@ -45,7 +51,7 @@ export const Home = () => {
 								sx={{ height: "320px", width: "340px" }}
 							>
 								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-									<Thumbnail thumbnail={v.thumbnail} />
+									<Thumbnail thumbnail={v?.thumbnail ? v.thumbnail : ""} />
 
 									<CardDetailsContainer>
 										<CardProfile>
@@ -64,7 +70,11 @@ export const Home = () => {
 										</CardProfile>
 										<CardDetails>
 											<CardTitle>{v.name}</CardTitle>
-											<CardSmall>{getShortAddress(v.creator.id)}</CardSmall>
+											<CardSmall>
+												{v.creator?.username
+													? v.creator?.username
+													: getShortAddress(v.creator.id)}
+											</CardSmall>
 											<CardSmall>
 												{v.views} views
 												<CardSmallSpan>

@@ -5,21 +5,37 @@ import TopNavbar from "../components/TopNavbar";
 import { Button, CircularProgress, IconButton, styled } from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
-import { BsCardImage } from "react-icons/bs";
 import { MdVideoFile } from "react-icons/md";
 
 // import bannerImage from "../assets/profileBack.jpg";
 import bannerImage from "../assets/wall3.jpg";
-import profileDp from "../assets/girlDP.jpg";
 import { purple, teal } from "@mui/material/colors";
 import { Home } from "./Home";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUser } from "../database/user";
+import { getUser, updateProfilePic } from "../database/user";
 import { getShortAddress } from "../utils/addressShort";
 import { EnableSubscription } from "../components/EnableSubscription";
+import { toast } from "react-toastify";
+
+import noImage from "../assets/No-Image-Placeholder.png";
+import { AiOutlineEdit } from "react-icons/ai";
+import { UpdateNameDialog } from "../components/UpdateNameDialog";
+import { getUserVideos } from "../database/video";
 
 export default function ProfileDesign() {
+	const [videos, setVideos] = useState([]);
+	const { userAddress } = useParams();
+
+	useEffect(() => {
+		const getVideos = async () => {
+			if (userAddress) {
+				const res = await getUserVideos(userAddress);
+				setVideos(res);
+			}
+		};
+		getVideos();
+	}, []);
 	return (
 		<Box sx={{ display: "flex", fontFamily: "Poppins, sans-serif" }}>
 			<CssBaseline />
@@ -27,7 +43,7 @@ export default function ProfileDesign() {
 			<Box component="main" sx={{ flexGrow: 1 }}>
 				<TopNavbar />
 				{ProfileBox()}
-				<Home />
+				<Home videos={videos} />
 			</Box>
 		</Box>
 	);
@@ -38,6 +54,7 @@ const ProfileBox = () => {
 	const [userLoading, setUserLoading] = useState(true);
 	const { userAddress } = useParams();
 	const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+	const [enableUserEdit, setEnableUserEdit] = useState(false);
 	const navigate = useNavigate();
 
 	function handleTokenDialogClose() {
@@ -56,14 +73,14 @@ const ProfileBox = () => {
 	}, [userAddress]);
 	return (
 		<>
-			{" "}
 			{userLoading ? (
-				<CircularProgress />
+				<></>
 			) : (
+				// <CircularProgress />
 				<>
 					<ProfileBanner>
 						<ChangeProfileBanner>
-							<IconButtonHolder
+							{/* <IconButtonHolder
 								sx={{
 									color: "white",
 									backgroundColor: "#191C22",
@@ -74,15 +91,60 @@ const ProfileBox = () => {
 							</IconButtonHolder>
 							<IconButtonHolder>
 								<BsCardImage />
-							</IconButtonHolder>
+							</IconButtonHolder> */}
 						</ChangeProfileBanner>
 					</ProfileBanner>
 					<ProfileDetailsContainer sx={{ px: 3, pt: 2, pb: 3 }}>
 						<ProfileDetailsContainerLeft>
-							<ProfileImage></ProfileImage>
+							<ProfileImage
+								sx={{
+									pt: "150px",
+									pl: "100px",
+									backgroundImage: user.profile_image
+										? `url("${user.profile_image}")`
+										: `url(${noImage})`,
+								}}
+							>
+								<IconButtonHolder
+									sx={{
+										color: "white",
+										backgroundColor: "#191C22",
+										borderRadius: "5px",
+									}}
+									component="label"
+									onChange={async (e) => {
+										console.log(e.target.files[0]);
+										if (e.target.files[0]?.type?.split("/")[0] !== "image")
+											toast("Please select a file with type image!");
+										else {
+											await updateProfilePic(e.target.files[0]);
+											getUserFromDB(userAddress);
+										}
+									}}
+								>
+									<RiImageEditLine />
+									<input type="file" hidden />
+								</IconButtonHolder>
+							</ProfileImage>
 							<OwnerDetails>
 								<h1>{getShortAddress(user.id)}</h1>
-								<h4>{user.username ? `@${user.username}` : "unKnown User"}</h4>
+								<UpdateNameDialog
+									isOpen={enableUserEdit}
+									handleExternalClose={() => {
+										setEnableUserEdit(false);
+									}}
+								/>
+								<Box sx={{ display: "flex", alignItems: "center" }}>
+									<h4>{user.username ? `@${user.username}` : "Unnamed"}</h4>
+
+									<IconButton
+										onClick={() => {
+											setEnableUserEdit(true);
+										}}
+									>
+										<AiOutlineEdit />
+									</IconButton>
+								</Box>
 							</OwnerDetails>
 						</ProfileDetailsContainerLeft>
 						<ProfileDetailsContainerRight>
@@ -165,7 +227,6 @@ const ProfileImage = styled(Box)({
 	height: "200px",
 	width: "150px",
 	borderRadius: "10px",
-	backgroundImage: `url(${profileDp})`,
 	backgroundRepeat: "no-repeat",
 	backgroundSize: "cover",
 	backgroundPosition: "center",

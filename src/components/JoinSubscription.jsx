@@ -56,7 +56,7 @@ export default function JoinSubscription({
 		};
 
 		getInitialDetails();
-	}, [isOpen, creator.premiumContractAddress]);
+	}, [isOpen, creator]);
 
 	async function joinPremium() {
 		if (!transferDetails) return alert("Try Again!");

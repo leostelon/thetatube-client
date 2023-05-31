@@ -190,7 +190,7 @@ const VideoBox = () => {
 												</RecommendedTime>
 											</RecommendedThumnail>
 											<RecommendedDetailContainer>
-												<RecommendedTitle></RecommendedTitle>
+												<RecommendedTitle>{v.name && v.name}</RecommendedTitle>
 												<Box
 													sx={{
 														display: "flex",

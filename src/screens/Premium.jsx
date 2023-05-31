@@ -9,6 +9,7 @@ import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import { getShortAddress } from "../utils/addressShort";
 import { timeSince } from "../utils/time";
 import { Thumbnail } from "../components/Thumbnail";
+import { VideosLoading } from "../components/VideosLoading";
 
 export default function Premium() {
 	return (
@@ -43,7 +44,7 @@ export const PremiumBox = () => {
 		<Box>
 			{/* <Navbar /> */}
 			{loading ? (
-				<CircularProgress />
+				<VideosLoading />
 			) : (
 				// <InfiniteScroll
 				// 	dataLength={videos?.length}

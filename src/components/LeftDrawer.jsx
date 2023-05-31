@@ -93,18 +93,18 @@ export default function LeftDrawer({ smaller }) {
 	const [index, setIndex] = useState(0);
 
 	function updateIndex(path) {
-		switch (path) {
-			case "/":
+		switch (path.split("/")[1]) {
+			case "":
 				return setIndex(0);
-			case "/explroe":
+			case "browse":
 				return setIndex(1);
-			case "/live":
+			case "live":
 				return setIndex(2);
-			case "/upload":
+			case "upload":
 				return setIndex(3);
-			case "/profile":
+			case "premium":
 				return setIndex(4);
-			case "/premium":
+			case "profile":
 				return setIndex(5);
 			default:
 				setIndex(0);

@@ -37,7 +37,7 @@ export async function getVideos() {
 		const response = await collectionReference
 			.where("drm", "==", false)
 			.sort("timestamp", "desc")
-			.limit(40)
+			.limit(100)
 			.get();
 		for (const video of response.data) {
 			if (video.data.creator.id !== "") {
@@ -64,7 +64,10 @@ export async function getVideo(videoId) {
 
 export async function searchVideos(search) {
 	try {
-		const results = await collectionReference.where("name", ">=", search).where('name', '<', `${search}\uFFFF`).get();
+		const results = await collectionReference
+			.where("name", ">=", search)
+			.where("name", "<", `${search}\uFFFF`)
+			.get();
 
 		return results.data;
 	} catch (error) {
@@ -77,6 +80,25 @@ export async function getPremiumVideos() {
 		const results = await collectionReference.where("drm", ">=", true).get();
 
 		return results.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+}
+
+export async function getUserVideos(address) {
+	try {
+		const { data } = await collectionReference.sort("timestamp", "desc").get();
+		const filteredRecords = data.filter(
+			(record) => record.data.creator?.id === address
+		);
+
+		for (const video of filteredRecords) {
+			if (video.data.creator.id !== "") {
+				const creator = await getUser(video.data.creator.id);
+				video.data.creator = creator;
+			}
+		}
+		return filteredRecords;
 	} catch (error) {
 		console.log(error.message);
 	}

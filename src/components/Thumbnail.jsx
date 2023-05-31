@@ -1,9 +1,9 @@
-import { Box } from '@mui/material';
-import React from 'react'
+import { Box } from "@mui/material";
+import React from "react";
 import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 
-export const Thumbnail = ({thumbnail}) => {
-  return (
+export const Thumbnail = ({ thumbnail }) => {
+	return (
 		<Box
 			sx={{
 				width: "100%",
@@ -23,4 +23,4 @@ export const Thumbnail = ({thumbnail}) => {
 			}}
 		></Box>
 	);
-}
+};

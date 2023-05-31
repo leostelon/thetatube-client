@@ -7,13 +7,18 @@ const collectionReference = db.collection("User");
 
 const createToken = async function (address) {
 	try {
+		const sign = await window.ethereum.request({
+			method: "personal_sign",
+			params: [address, "Please approve this message."],
+		});
+
 		const payload = {
 			wallet_address: address,
 		};
 		const token = jwt.sign(payload, process.env.REACT_APP_JWT_SECRET, {
 			expiresIn: "60 days",
 		});
-
+		console.log("(!@ reaced");
 		await collectionReference.record(address).call("updateToken", [token]);
 
 		return token;
@@ -80,10 +85,23 @@ const updateProfilePic = async function (file) {
 	}
 };
 
+const updateUsername = async function (username) {
+	try {
+		const userAddress = await getWalletAddress();
+		const response = await collectionReference
+			.record(userAddress)
+			.call("updateUsername", [username]);
+		return response.data;
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
 module.exports = {
 	createToken,
 	createUser,
 	getUser,
 	enableSubscription,
 	updateProfilePic,
+	updateUsername,
 };
