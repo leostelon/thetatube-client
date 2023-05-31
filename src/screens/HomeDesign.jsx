@@ -6,6 +6,9 @@ import TopNavbar from "../components/TopNavbar";
 import { Button, styled } from "@mui/material";
 import { Home } from "./Home";
 
+import AliceCarousel from "react-alice-carousel";
+import "react-alice-carousel/lib/alice-carousel.css";
+
 import bannerImage from "../assets/ava2.jpg";
 
 export default function HomeDesign() {
@@ -21,7 +24,7 @@ export default function HomeDesign() {
 			<LeftDrawer />
 			<Box component="main" sx={{ flexGrow: 1 }}>
 				<TopNavbar />
-				<Box sx={{ p: 3 }}>{Banner()}</Box>
+				<Box sx={{ p: 3, maxWidth: "82vw" }}>{Banner()}</Box>
 
 				<CardHeader sx={{ mb: 2 }}>Explore</CardHeader>
 
@@ -32,9 +35,10 @@ export default function HomeDesign() {
 }
 
 const Banner = () => {
+	const handleDragStart = (e) => e.preventDefault();
 	return (
 		<BannerBox>
-			<WatchButtonContainer>
+			{/* <WatchButtonContainer>
 				<Button
 					variant="contained"
 					color={"error"}
@@ -47,7 +51,19 @@ const Banner = () => {
 				>
 					Watch
 				</Button>
-			</WatchButtonContainer>
+			</WatchButtonContainer> */}
+
+			<AliceCarousel
+				mouseTracking
+				items={["/images/wall.jpg", "/images/wall2.jpg"].map((src) => (
+					<img
+						src={src}
+						onDragStart={handleDragStart}
+						role="presentation"
+						style={{ height: "300px", width: "100%", borderRadius: "10px" }}
+					/>
+				))}
+			/>
 		</BannerBox>
 	);
 };
@@ -58,10 +74,10 @@ const BannerBox = styled(Box)({
 	borderRadius: "10px",
 	backgroundColor: "grey",
 
-	backgroundImage: `url(${bannerImage})`,
-	backgroundRepeat: "no-repeat",
-	backgroundSize: "cover",
-	backgroundPosition: "center",
+	// backgroundImage: `url(${bannerImage})`,
+	// backgroundRepeat: "no-repeat",
+	// backgroundSize: "cover",
+	// backgroundPosition: "center",
 });
 
 const WatchButtonContainer = styled(Box)({
