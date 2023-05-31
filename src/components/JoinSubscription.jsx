@@ -30,7 +30,8 @@ export default function JoinSubscription({
 
 	useEffect(() => {
 		const getInitialDetails = async () => {
-			if (!window.web3?.eth?.Contract) return;
+			if (!window.web3?.eth?.Contract || !creator.premiumContractAddress)
+				return;
 			const contract = new window.web3.eth.Contract(
 				ThetaTubeInterface.abi,
 				creator.premiumContractAddress

@@ -23,14 +23,11 @@ export const Home = ({ videos: withVideos }) => {
 	}
 
 	useEffect(() => {
-		console.log("pro", withVideos);
 		if (withVideos) {
 			setVideos(withVideos);
 			setLoading(false);
 		} else fetchVideos();
 	}, [withVideos]);
-
-	console.log(videos);
 
 	return (
 		<Box>

@@ -115,7 +115,6 @@ export const Upload = () => {
 								type="file"
 								hidden
 								onChange={(e) => {
-									console.log(e.target.files[0]);
 									if (e.target.files[0]?.type !== "video/mp4")
 										toast("Please select a file with type video/mp4!");
 									else setFileInfo(e.target.files[0]);
@@ -147,7 +146,6 @@ export const Upload = () => {
 								type="file"
 								hidden
 								onChange={(e) => {
-									console.log(e.target.files[0]);
 
 									if (e.target.files[0]?.type?.split("/")[0] !== "image")
 										toast("Please select a file with type image!");

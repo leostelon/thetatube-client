@@ -26,7 +26,6 @@ export async function uploadVideo(
 		await uploadToPresignedUrl(presignedURL, file);
 		const transcodedResponse = await transcodeUpload(uploadId);
 		const response = await getVideo(transcodedResponse.data.body.videos[0].id);
-		console.log(response.data.body.videos);
 		const v = response.data.body.videos[0];
 
 		// get premium contract address
@@ -54,7 +53,6 @@ export async function uploadVideo(
 
 export async function createPresignedUrl() {
 	try {
-		console.log(THETA_KEY, THETA_SECRET);
 		const response = await axios.post(
 			VIDEO_URL + "/upload",
 			{},

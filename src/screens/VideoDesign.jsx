@@ -1,6 +1,5 @@
 import { Box, CircularProgress, CssBaseline, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Navbar } from "../components/Navbar";
 import { useParams } from "react-router-dom";
 import { getVideo, getVideos } from "../database/video";
 
@@ -20,7 +19,14 @@ import LeftDrawer from "../components/LeftDrawer";
 import prof from "../assets/profileBack.jpg";
 
 import imageNot from "../assets/No-Image-Placeholder.png";
-import { AiFillDislike, AiFillLike, AiOutlineEye } from "react-icons/ai";
+import {
+	AiFillDislike,
+	AiFillLike,
+	AiOutlineDislike,
+	AiOutlineEye,
+	AiOutlineLike,
+} from "react-icons/ai";
+import { createLike, getVideoLike, toggleLiked } from "../database/like";
 
 export function VideoDesign() {
 	return (
@@ -42,10 +48,29 @@ const VideoBox = () => {
 	const [creator, setCreator] = useState();
 	const [videos, setVideos] = useState([]);
 	const [boughtPremium, setBoughtPremium] = useState(false);
+	const [totalLiked, setTotalLiked] = useState(0);
+	const [userLikes, setUserLiked] = useState(false);
+	const currentLoggedUser = localStorage.getItem("address");
 
 	const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
 
 	const { videoId } = useParams();
+
+	async function getLikesData() {
+		const res = await getVideoLike(videoId, currentLoggedUser);
+		setTotalLiked(res.likes);
+		setUserLiked(res.userLiked);
+	}
+
+	async function handleLike(like) {
+		if (currentLoggedUser === "" || currentLoggedUser === undefined) return;
+		if (userLikes === undefined) {
+			await createLike(like, videoId, currentLoggedUser);
+		} else {
+			await toggleLiked(userLikes.data.id, like);
+		}
+		getLikesData();
+	}
 
 	async function getVideoFromId(videoId) {
 		setLoading(true);
@@ -60,28 +85,31 @@ const VideoBox = () => {
 			checkPremiumBought();
 		}
 		setLoading(false);
+		getLikesData();
 	}
 
 	// Check if token already exist's
 	async function checkPremiumBought() {
-		if (!creator) return;
-		const currentAddress = await getWalletAddress();
-		// if (!currentAddress) alert("Please connect your wallet");
+		try {
+			if (!creator || !creator.premiumContractAddress) return;
+			const currentAddress = await getWalletAddress();
+			if (!currentAddress) return;
 
-		const contract = new window.web3.eth.Contract(
-			ThetaTubeInterface.abi,
-			creator.premiumContractAddress
-		);
-		const balance = await contract.methods.balanceOf(currentAddress).call();
-		if (parseInt(balance) > 0) setBoughtPremium(true);
+			const contract = new window.web3.eth.Contract(
+				ThetaTubeInterface.abi,
+				creator.premiumContractAddress
+			);
+			const balance = await contract.methods.balanceOf(currentAddress).call();
+			if (parseInt(balance) > 0) setBoughtPremium(true);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	useEffect(() => {
 		getVideoFromId(videoId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [videoId]);
-
-	console.log(creator, videos, video);
 
 	return (
 		<Box>
@@ -109,7 +137,7 @@ const VideoBox = () => {
 										height="100%"
 										allowFullScreen
 										// className="h-[400px] w-[100%]"
-										// title={video.id}
+										title={videoId}
 										style={{ borderRadius: "20px" }}
 									/>
 								</VideoContainer>
@@ -120,8 +148,8 @@ const VideoBox = () => {
 									ago={
 										video.timestamp && `${timeSince(new Date(video.timestamp))}`
 									}
-									likes={"457830"}
-									disLikes={"100"}
+									totalLiked={totalLiked}
+									handleLike={handleLike}
 								/>
 
 								<VideoGridContainer
@@ -242,7 +270,14 @@ const VideoBox = () => {
 	);
 };
 
-const VideoTitleModule = ({ title, views, ago, likes, disLikes }) => {
+const VideoTitleModule = ({
+	title,
+	views,
+	ago,
+	totalLiked,
+	userLikes,
+	handleLike,
+}) => {
 	return (
 		<VideoTitleBox>
 			{/* {video.name && video.name} */}
@@ -257,25 +292,47 @@ const VideoTitleModule = ({ title, views, ago, likes, disLikes }) => {
 			</VideoOwnerSubs>
 			<LikesBox>
 				{/* <LikesIconBox> */}
-				<IconButton>
-					<AiFillLike style={{ width: "22px", height: "22px" }} />
+				<IconButton onClick={() => handleLike(true)}>
+					{userLikes === undefined ? (
+						<AiOutlineLike style={{ width: "22px", height: "22px" }} />
+					) : userLikes?.data?.liked ? (
+						<AiFillLike style={{ width: "22px", height: "22px" }} />
+					) : (
+						<AiOutlineLike style={{ width: "22px", height: "22px" }} />
+					)}
 				</IconButton>
 
 				{/* </LikesIconBox> */}
-				<Box sx={{ mr: 2 }}>{likes}</Box>
+				<Box sx={{ mr: 2 }}>{totalLiked}</Box>
 
-				{/* <LikesIconBox> */}
-				<IconButton>
-					<AiFillDislike
-						style={{
-							width: "22px",
-							height: "22px",
-							color: "grey",
-						}}
-					/>
+				{/* <DislikesIconBox> */}
+				<IconButton onClick={() => handleLike(false)}>
+					{userLikes === undefined ? (
+						<AiOutlineDislike
+							style={{
+								width: "22px",
+								height: "22px",
+								color: "grey",
+							}}
+						/>
+					) : !userLikes?.data?.liked ? (
+						<AiFillDislike
+							style={{
+								width: "22px",
+								height: "22px",
+								color: "grey",
+							}}
+						/>
+					) : (
+						<AiOutlineDislike
+							style={{
+								width: "22px",
+								height: "22px",
+								color: "grey",
+							}}
+						/>
+					)}
 				</IconButton>
-				{/* </LikesIconBox> */}
-				<Box sx={{ color: "grey" }}>{disLikes}</Box>
 			</LikesBox>
 		</VideoTitleBox>
 	);

@@ -39,6 +39,9 @@ export const Browse = () => {
 			<Box component="main" sx={{ flexGrow: 1, backgroundColor: "#111" }}>
 				<TopNavbar />
 				<Box>
+					<Box sx={{ px: 2, color: "white" }}>
+						<h2>Explore🧭</h2>
+					</Box>
 					{/* <Navbar /> */}
 					{loading ? (
 						<VideosLoading />

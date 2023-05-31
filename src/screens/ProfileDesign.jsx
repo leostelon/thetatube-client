@@ -80,7 +80,6 @@ const ProfileBox = () => {
 	}, [userAddress]);
 
 	const updateProfileImage = async (e) => {
-		console.log(e.target.files[0]);
 		if (e.target.files[0]?.type?.split("/")[0] !== "image")
 			toast("Please select a file with type image!");
 		else {
