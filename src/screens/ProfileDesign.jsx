@@ -2,7 +2,13 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
-import { Button, CircularProgress, IconButton, styled } from "@mui/material";
+import {
+	Button,
+	CircularProgress,
+	IconButton,
+	Skeleton,
+	styled,
+} from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
 import { MdVideoFile } from "react-icons/md";
@@ -52,6 +58,7 @@ export default function ProfileDesign() {
 const ProfileBox = () => {
 	const [user, setUser] = useState();
 	const [userLoading, setUserLoading] = useState(true);
+	const [profileImageLoading, setProfileImageLoading] = useState(false);
 	const { userAddress } = useParams();
 	const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 	const [enableUserEdit, setEnableUserEdit] = useState(false);
@@ -71,6 +78,18 @@ const ProfileBox = () => {
 	useEffect(() => {
 		getUserFromDB(userAddress);
 	}, [userAddress]);
+
+	const updateProfileImage = async (e) => {
+		console.log(e.target.files[0]);
+		if (e.target.files[0]?.type?.split("/")[0] !== "image")
+			toast("Please select a file with type image!");
+		else {
+			setProfileImageLoading(true);
+			await updateProfilePic(e.target.files[0]);
+			getUserFromDB(userAddress);
+			setProfileImageLoading(false);
+		}
+	};
 	return (
 		<>
 			{userLoading ? (
@@ -96,36 +115,43 @@ const ProfileBox = () => {
 					</ProfileBanner>
 					<ProfileDetailsContainer sx={{ px: 3, pt: 2, pb: 3 }}>
 						<ProfileDetailsContainerLeft>
-							<ProfileImage
-								sx={{
-									pt: "150px",
-									pl: "100px",
-									backgroundImage: user.profile_image
-										? `url("${user.profile_image}")`
-										: `url(${noImage})`,
-								}}
-							>
-								<IconButtonHolder
+							{profileImageLoading ? (
+								<Skeleton
+									variant="rectangular"
 									sx={{
-										color: "white",
-										backgroundColor: "#191C22",
-										borderRadius: "5px",
+										borderRadius: "10px",
+										pt: "150px",
+										pl: "100px",
+										height: "200px",
+										width: "150px",
+										position: "absolute",
+										top: "-100px",
 									}}
-									component="label"
-									onChange={async (e) => {
-										console.log(e.target.files[0]);
-										if (e.target.files[0]?.type?.split("/")[0] !== "image")
-											toast("Please select a file with type image!");
-										else {
-											await updateProfilePic(e.target.files[0]);
-											getUserFromDB(userAddress);
-										}
+								/>
+							) : (
+								<ProfileImage
+									sx={{
+										pt: "150px",
+										pl: "100px",
+										backgroundImage: user.profile_image
+											? `url("${user.profile_image}")`
+											: `url(${noImage})`,
 									}}
 								>
-									<RiImageEditLine />
-									<input type="file" hidden />
-								</IconButtonHolder>
-							</ProfileImage>
+									<IconButtonHolder
+										sx={{
+											color: "white",
+											backgroundColor: "#191C22",
+											borderRadius: "5px",
+										}}
+										component="label"
+										onChange={updateProfileImage}
+									>
+										<RiImageEditLine />
+										<input type="file" hidden />
+									</IconButtonHolder>
+								</ProfileImage>
+							)}
 							<OwnerDetails>
 								<h1>{getShortAddress(user.id)}</h1>
 								<UpdateNameDialog
