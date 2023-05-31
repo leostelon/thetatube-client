@@ -24,3 +24,11 @@ export function timeSince(date) {
 	}
 	return Math.floor(seconds) + " seconds";
 }
+
+export function hmsConvertor(sec) {
+	if (sec >= 3600) {
+		return new Date(sec * 1000).toISOString().slice(11, 19);
+	}
+
+	return new Date(sec * 1000).toISOString().slice(14, 19);
+}

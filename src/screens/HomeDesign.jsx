@@ -53,6 +53,7 @@ const Banner = () => {
 
 			<AliceCarousel
 				mouseTracking
+				disableButtonsControls
 				items={["/images/wall.jpg", "/images/wall2.jpg"].map((src, i) => (
 					<img
 						src={src}

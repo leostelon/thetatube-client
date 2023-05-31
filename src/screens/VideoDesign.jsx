@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 
-import { timeSince } from "../utils/time";
+import { hmsConvertor, timeSince } from "../utils/time";
 import { getUser } from "../database/user";
 import { getShortAddress } from "../utils/addressShort";
 import { getWalletAddress } from "../utils/wallet";
@@ -213,9 +213,11 @@ const VideoBox = () => {
 														: `url(${imageNot})`,
 												}}
 											>
-												<RecommendedTime>
-													{v.length !== null && v.length}
-												</RecommendedTime>
+												{v.length !== null && (
+													<RecommendedTime>
+														{hmsConvertor(Math.round(v.length))}
+													</RecommendedTime>
+												)}
 											</RecommendedThumnail>
 											<RecommendedDetailContainer>
 												<RecommendedTitle>{v.name && v.name}</RecommendedTitle>
@@ -447,7 +449,7 @@ const RecommendedBox = styled.div`
 `;
 
 const RecommendedThumnail = styled.div`
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 
 	width: 136px;
 	height: 94px;
@@ -510,25 +512,13 @@ const ColorButton = muiStyled(Button)(() => ({
 }));
 
 const RecommendedTime = styled.div`
-	font-size: 10px;
+	font-size: 11px;
 	font-weight: 400;
 
-	width: 60px;
+	width: 40px;
 	margin: 10px;
-	padding: 5px;
+	padding: 2px 5px;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	border-radius: 10px;
-	background-color: black;
-	background-image: radial-gradient(
-		circle,
-		#616161,
-		#595959,
-		#515151,
-		#4a4a4a,
-		#424242
-	);
+	border-radius: 4px;
+	background-color: #1f1f1f;
 `;

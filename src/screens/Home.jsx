@@ -48,7 +48,10 @@ export const Home = ({ videos: withVideos }) => {
 								sx={{ height: "320px", width: "340px" }}
 							>
 								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
-									<Thumbnail thumbnail={v?.thumbnail ? v.thumbnail : ""} />
+									<Thumbnail
+										thumbnail={v?.thumbnail ? v.thumbnail : ""}
+										length={v.length}
+									/>
 
 									<CardDetailsContainer>
 										<CardProfile>
