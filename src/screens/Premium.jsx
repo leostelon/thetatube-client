@@ -1,4 +1,4 @@
-import { Box, CircularProgress, CssBaseline, Grid } from "@mui/material";
+import { Box, CssBaseline, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";

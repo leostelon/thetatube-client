@@ -3,13 +3,11 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
-import { Button, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { Home } from "./Home";
 
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
-
-import bannerImage from "../assets/ava2.jpg";
 
 export default function HomeDesign() {
 	return (
@@ -55,12 +53,13 @@ const Banner = () => {
 
 			<AliceCarousel
 				mouseTracking
-				items={["/images/wall.jpg", "/images/wall2.jpg"].map((src) => (
+				items={["/images/wall.jpg", "/images/wall2.jpg"].map((src, i) => (
 					<img
 						src={src}
 						onDragStart={handleDragStart}
 						role="presentation"
 						style={{ height: "300px", width: "100%", borderRadius: "10px" }}
+						alt={"banner-" + i}
 					/>
 				))}
 			/>
@@ -78,12 +77,6 @@ const BannerBox = styled(Box)({
 	// backgroundRepeat: "no-repeat",
 	// backgroundSize: "cover",
 	// backgroundPosition: "center",
-});
-
-const WatchButtonContainer = styled(Box)({
-	width: "100%",
-	paddingTop: "220px",
-	paddingLeft: "60px",
 });
 
 const CardHeader = styled(Box)({

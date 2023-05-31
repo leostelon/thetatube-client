@@ -2,13 +2,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
-import {
-	Button,
-	CircularProgress,
-	IconButton,
-	Skeleton,
-	styled,
-} from "@mui/material";
+import { Button, IconButton, Skeleton, styled } from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
 import { MdVideoFile } from "react-icons/md";
@@ -41,7 +35,7 @@ export default function ProfileDesign() {
 			}
 		};
 		getVideos();
-	}, []);
+	}, [userAddress]);
 	return (
 		<Box sx={{ display: "flex", fontFamily: "Poppins, sans-serif" }}>
 			<CssBaseline />
