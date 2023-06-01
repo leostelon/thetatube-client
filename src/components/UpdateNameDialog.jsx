@@ -36,8 +36,7 @@ export const UpdateNameDialog = ({ isOpen, handleExternalClose }) => {
 					<br />
 				</Box>
 				<p style={{ fontWeight: "500", maxWidth: "350px" }}>
-					Please update your username, it should be unique across the platform.
-					Username's are attached to the docker image.
+					Please update your username, It should be unique across the platform.
 				</p>
 				<Box
 					sx={{

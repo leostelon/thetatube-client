@@ -7,17 +7,8 @@ import { connectWalletToSite, getWalletAddress } from "../utils/wallet";
 import { createUser } from "../database/user";
 
 export default function TopNavbar() {
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
 	const navigate = useNavigate();
 	const [connectedToSite, setConnectedToSite] = useState(false);
-
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 
 	async function connectSite() {
 		await connectWalletToSite();
@@ -59,7 +50,6 @@ export default function TopNavbar() {
 						onClick={() => {
 							const address = localStorage.getItem("address");
 							navigate("/profile/" + address);
-							setAnchorEl(null);
 						}}
 					>
 						<MdAccountCircle />

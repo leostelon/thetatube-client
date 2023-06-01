@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract ThetaTube is ERC721, Ownable {
     using Counters for Counters.Counter;
 
-    Counters.Counter private _tokenIdCounter;
+    Counters.Counter public _tokenIdCounter;
     address payable public creator;
     uint256 public price;
 

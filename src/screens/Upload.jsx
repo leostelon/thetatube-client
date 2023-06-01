@@ -29,8 +29,8 @@ export function Upload() {
 	);
 }
 const UploadBox = () => {
-	const [name, setName] = useState("Video Name");
-	const [description, setDescription] = useState("Video Description");
+	const [name, setName] = useState("");
+	const [description, setDescription] = useState("");
 	const [duration, setDuration] = useState();
 
 	const [file, setFile] = useState();
@@ -92,9 +92,9 @@ const UploadBox = () => {
 		if (!file) return toast("Please select a file!"); // Enable this, disabled only for testing
 		if (!thumbnailFile) return toast("Please add thumbnail!");
 		if (!name || name === "")
-			return toast("Please enter a name for this dataset.");
+			return toast("Please enter a name for your video.");
 		if (!description || description === "")
-			return toast("Please enter a description for this dataset.");
+			return toast("Please enter a description for your video.");
 		if (!duration) return toast("Unable to fetch video duration.");
 		setUploadLoading(true);
 		// Upload File here
