@@ -135,7 +135,7 @@ const CardProfile = styled.div`
 const CardDetails = styled.div`
 	overflow-x: hidden;
 	padding-right: 24px;
-	max-width: 250px;
+	max-width: 350px;
 `;
 
 const CardTitle = styled.div`

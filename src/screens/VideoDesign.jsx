@@ -1,6 +1,6 @@
 import { Box, CircularProgress, CssBaseline, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getVideo, getVideos } from "../database/video";
 
 import styled from "styled-components";
@@ -16,8 +16,6 @@ import JoinSubscription from "../components/JoinSubscription";
 import TopNavbar from "../components/TopNavbar";
 import LeftDrawer from "../components/LeftDrawer";
 
-import prof from "../assets/profileBack.jpg";
-
 import imageNot from "../assets/No-Image-Placeholder.png";
 import {
 	AiFillDislike,
@@ -27,6 +25,7 @@ import {
 	AiOutlineLike,
 } from "react-icons/ai";
 import { createLike, getVideoLike, toggleLiked } from "../database/like";
+import noImage from "../assets/No-Image-Placeholder.png";
 
 export function VideoDesign() {
 	return (
@@ -51,10 +50,12 @@ const VideoBox = () => {
 	const [totalLiked, setTotalLiked] = useState(0);
 	const [userLikes, setUserLiked] = useState(false);
 	const currentLoggedUser = localStorage.getItem("address");
+	const [subscriberCount, setSubscriberCount] = useState(0);
 
 	const [joinSubscriptionOpen, setJoinSubscriptionOpen] = useState(false);
 
 	const { videoId } = useParams();
+	const navigate = useNavigate();
 
 	async function getLikesData() {
 		const res = await getVideoLike(videoId, currentLoggedUser);
@@ -83,6 +84,7 @@ const VideoBox = () => {
 			const creator = await getUser(response.creator.id);
 			setCreator(creator);
 			checkPremiumBought();
+			getSubscribersCount();
 		}
 		setLoading(false);
 		getLikesData();
@@ -101,6 +103,22 @@ const VideoBox = () => {
 			);
 			const balance = await contract.methods.balanceOf(currentAddress).call();
 			if (parseInt(balance) > 0) setBoughtPremium(true);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	// Get subscribers count
+	async function getSubscribersCount() {
+		try {
+			if (!creator || !creator.premiumContractAddress) return;
+
+			const contract = new window.web3.eth.Contract(
+				ThetaTubeInterface.abi,
+				creator.premiumContractAddress
+			);
+			const balance = await contract.methods._tokenIdCounter().call();
+			setSubscriberCount(parseInt(balance));
 		} catch (error) {
 			console.log(error);
 		}
@@ -132,22 +150,20 @@ const VideoBox = () => {
 									<iframe
 										// src={`https://player.thetavideoapi.com/video/video_1nt5wshd78vsar73tt51awcdkg`}
 										src={`https://player.thetavideoapi.com/video/${videoId}`}
-										border="0"
 										width="100%"
 										height="100%"
 										allowFullScreen
 										// className="h-[400px] w-[100%]"
 										title={videoId}
-										style={{ borderRadius: "20px" }}
+										style={{
+											borderRadius: "20px",
+											border: ".05px solid #111",
+										}}
 									/>
 								</VideoContainer>
 
 								<VideoTitleModule
 									title={video.name && video.name}
-									views={video.views && video.views}
-									ago={
-										video.timestamp && `${timeSince(new Date(video.timestamp))}`
-									}
 									totalLiked={totalLiked}
 									handleLike={handleLike}
 								/>
@@ -158,24 +174,33 @@ const VideoBox = () => {
 									}}
 								>
 									<VideoProfile>
-										<img
-											src="/images/wall.jpg"
-											alt=""
-											srcSet=""
+										<Box
+											sx={{
+												backgroundImage: creator.profile_image
+													? `url("${creator.profile_image}")`
+													: `url(${noImage})`,
+												backgroundPosition: "center",
+												backgroundSize: "cover",
+												backgroundRepeat: "no-repeat",
+											}}
 											style={{
 												height: "100%",
 												width: "100%",
 												objectFit: "cover ",
 												borderRadius: "10px",
 											}}
-										/>
+										></Box>
 									</VideoProfile>
 									<VideoDetails>
 										<VideoOwner>
 											{creator?.id && getShortAddress(creator.id)}
 											{/* owner */}
 										</VideoOwner>
-										<VideoOwnerSubs>22.7 M Subscribers</VideoOwnerSubs>
+										<VideoOwnerSubs
+											style={{ fontWeight: "400", color: "#aaa" }}
+										>
+											{subscriberCount} Subscribers
+										</VideoOwnerSubs>
 									</VideoDetails>
 									<ColorButton
 										variant="contained"
@@ -199,6 +224,15 @@ const VideoBox = () => {
 									/>
 								</VideoGridContainer>
 								<VideoDescription>
+									<VideoOwnerSubs style={{ marginBottom: "4px" }}>
+										{/* {video.views && `${video.views} views`}  */}{" "}
+										{video.views && video.views} views
+										<RecommendedSmallSpan>
+											{video.timestamp &&
+												`${timeSince(new Date(video.timestamp))}`}{" "}
+											ago
+										</RecommendedSmallSpan>
+									</VideoOwnerSubs>
 									{video.description && video.description}
 								</VideoDescription>
 							</VideoContainerBox>
@@ -211,7 +245,9 @@ const VideoBox = () => {
 													backgroundImage: v.thumbnail
 														? `url("${v.thumbnail}")`
 														: `url(${imageNot})`,
+													cursor: "pointer",
 												}}
+												onClick={() => navigate("/video/" + v.id)}
 											>
 												{v.length !== null && (
 													<RecommendedTime>
@@ -220,11 +256,23 @@ const VideoBox = () => {
 												)}
 											</RecommendedThumnail>
 											<RecommendedDetailContainer>
-												<RecommendedTitle>{v.name && v.name}</RecommendedTitle>
+												<RecommendedTitle
+													style={{
+														cursor: "pointer",
+													}}
+													onClick={() => navigate("/video/" + v.id)}
+												>
+													{v.name && v.name}
+												</RecommendedTitle>
 												<Box
 													sx={{
 														display: "flex",
 														alignItems: "center",
+														cursor: "pointer",
+													}}
+													onClick={() => {
+														if (v.creator?.id)
+															navigate("/profile/" + v.creator.id);
 													}}
 												>
 													<Box
@@ -232,11 +280,12 @@ const VideoBox = () => {
 															height: "20px",
 															width: "20px",
 															borderRadius: "2px",
-															backgroundImage: `url(${prof})`,
-															backgroundRepeat: "no-repeat",
-															backgroundSize: "cover",
+															backgroundImage: v.creator.profile_image
+																? `url("${v.creator.profile_image}")`
+																: `url(${noImage})`,
 															backgroundPosition: "center",
-
+															backgroundSize: "cover",
+															backgroundRepeat: "no-repeat",
 															mr: 1,
 														}}
 													></Box>
@@ -272,26 +321,12 @@ const VideoBox = () => {
 	);
 };
 
-const VideoTitleModule = ({
-	title,
-	views,
-	ago,
-	totalLiked,
-	userLikes,
-	handleLike,
-}) => {
+const VideoTitleModule = ({ title, totalLiked, userLikes, handleLike }) => {
 	return (
 		<VideoTitleBox>
 			{/* {video.name && video.name} */}
 			<VideoTitle> {title}</VideoTitle>
-			<VideoOwnerSubs>
-				{/* {video.views && `${video.views} views`}  */} {views} views
-				<RecommendedSmallSpan>
-					{/* {video.timestamp &&
-                        `${timeSince(new Date(video.timestamp))} ago`} */}
-					{ago} ago
-				</RecommendedSmallSpan>
-			</VideoOwnerSubs>
+
 			<LikesBox>
 				{/* <LikesIconBox> */}
 				<IconButton onClick={() => handleLike(true)}>
@@ -395,6 +430,7 @@ const VideoGridContainer = styled.div`
 	display: flex;
 	align-items: center;
 	/* margin-bottom: 20px; */
+	margin-bottom: 8px;
 `;
 const VideoProfile = styled.div`
 	height: 40px;
@@ -423,8 +459,8 @@ const VideoOwner = styled.div`
 
 const VideoOwnerSubs = styled.div`
 	font-size: 14px;
-	font-weight: 400;
-	color: #aaa;
+	font-weight: 600;
+	color: white;
 `;
 
 const VideoDescription = styled.div`
@@ -433,7 +469,7 @@ const VideoDescription = styled.div`
 
 	width: 100%;
 
-	background-color: #414141;
+	background-color: #41414186;
 	padding: 10px;
 	border-radius: 10px;
 
