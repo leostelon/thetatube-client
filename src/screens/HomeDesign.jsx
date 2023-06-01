@@ -20,9 +20,9 @@ export default function HomeDesign() {
 		>
 			<CssBaseline />
 			<LeftDrawer />
-			<Box component="main" sx={{ flexGrow: 1 }}>
+			<Box style={{ width: `calc(100vw - 280px)` }}>
 				<TopNavbar />
-				<Box sx={{ p: 3, maxWidth: "82vw" }}>{Banner()}</Box>
+				<Box sx={{ p: 3 }}>{Banner()}</Box>
 
 				<CardHeader sx={{ mb: 2 }}>Explore</CardHeader>
 
@@ -54,12 +54,21 @@ const Banner = () => {
 			<AliceCarousel
 				mouseTracking
 				disableButtonsControls
-				items={["/images/wall.jpg", "/images/wall2.jpg"].map((src, i) => (
+				items={[
+					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/person.jpg",
+					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/shark.jpg",
+					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/tiktok.jpg",
+				].map((src, i) => (
 					<img
 						src={src}
 						onDragStart={handleDragStart}
 						role="presentation"
-						style={{ height: "300px", width: "100%", borderRadius: "10px" }}
+						style={{
+							height: "300px",
+							width: `100%`,
+							borderRadius: "10px",
+							minWidth: 0,
+						}}
 						alt={"banner-" + i}
 					/>
 				))}
@@ -69,10 +78,10 @@ const Banner = () => {
 };
 
 const BannerBox = styled(Box)({
-	width: "100%",
+	// width: "100%",
 	height: "300px",
 	borderRadius: "10px",
-	backgroundColor: "grey",
+	// backgroundColor: "grey",
 
 	// backgroundImage: `url(${bannerImage})`,
 	// backgroundRepeat: "no-repeat",
