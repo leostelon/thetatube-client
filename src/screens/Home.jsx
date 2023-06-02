@@ -142,7 +142,7 @@ const CardProfile = styled.div`
 const CardDetails = styled.div`
 	overflow-x: hidden;
 	padding-right: 24px;
-	max-width: 350px;
+	max-width: 400px;
 `;
 
 const CardTitle = styled.div`

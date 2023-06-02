@@ -66,7 +66,9 @@ const UploadBox = () => {
 
 	function setFileInfo(file) {
 		if (file.type !== "video/mp4")
-			return toast("Please select a file with type video/mp4!");
+			return toast("Please select a file with type video/mp4!", {
+				type: "info",
+			});
 		var video = document.createElement("video");
 		video.preload = "metadata";
 		video.onloadedmetadata = function () {
@@ -152,7 +154,9 @@ const UploadBox = () => {
 								component="label"
 								onChange={(e) => {
 									if (e.target.files[0]?.type?.split("/")[0] !== "image")
-										toast("Please select a file with type image!");
+										toast("Please select a file with type image!", {
+											type: "info",
+										});
 									else setThumbnailFile(e.target.files[0]);
 								}}
 							>

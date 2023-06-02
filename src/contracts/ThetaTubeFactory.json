@@ -106,6 +106,25 @@
 					"type": "address"
 				}
 			],
+			"name": "ownerToAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
 			"name": "price",
 			"outputs": [
 				{

@@ -11,16 +11,22 @@ import {
 	TextField,
 } from "@mui/material";
 import { enableSubscription } from "../database/user";
+import { toast } from "react-toastify";
+import Web3 from "web3";
 
 export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 	const [loading, setLoading] = useState(false);
 	const [open, setOpen] = useState(false);
 
-	const [tokenName, setTokenName] = useState();
-	const [tokenSymbol, setTokenSymbol] = useState();
-	const [tokenPrice, setTokenPrice] = useState();
+	const [tokenName, setTokenName] = useState("");
+	const [tokenSymbol, setTokenSymbol] = useState("");
+	const [tokenPrice, setTokenPrice] = useState(0);
 
 	async function createSubscription() {
+		if (tokenName === "" || tokenSymbol === "" || tokenPrice === 0)
+			return toast("Please fill all the fields", { type: "info" });
+		if (loading) return;
+
 		setLoading(true);
 		await switchChain();
 		const contract = new window.web3.eth.Contract(
@@ -28,29 +34,37 @@ export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 			CONTRACT_ADDRESS
 		);
 		const currentAddress = await getWalletAddress();
+		const weiPrice = Web3.utils.toWei(tokenPrice);
 
 		// Gas Calculation
 		const gasPrice = await window.web3.eth.getGasPrice();
 		const gas = await contract.methods
-			.createToken(tokenName, tokenSymbol, tokenPrice, currentAddress) // change 2 to price taken from field
+			.createToken(tokenName, tokenSymbol, weiPrice, currentAddress) // change 2 to price taken from field
 			.estimateGas({
 				from: currentAddress,
 			});
 
-		const resp = await contract.methods
-			.createToken(tokenName, tokenSymbol, tokenPrice, currentAddress) // change 2 to price taken from field
+		await contract.methods
+			.createToken(tokenName, tokenSymbol, weiPrice, currentAddress) // change 2 to price taken from field
 			.send({ from: currentAddress, gasPrice, gas })
 			.on("transactionHash", function (hash) {
 				// setStatus(3);
 			})
 			.on("receipt", async function (receipt) {
-				await enableSubscription(
-					receipt.events.TokenDeployed.returnValues.tokenAddress
-				);
+				// Get token address
+				const nftAddress = await contract.methods
+					.ownerToAddress(currentAddress)
+					.call();
+
+				await enableSubscription(nftAddress);
 				setLoading(false);
-				alert("Premium subscription eneabled!");
+				toast("Premium subscription eneabled!", { type: "success" });
+				await new Promise((res, rej) => {
+					setTimeout(() => {
+						window.location.reload();
+					}, 3000);
+				});
 			});
-		console.log(resp);
 	}
 
 	const handleClose = () => {
@@ -71,7 +85,7 @@ export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 			<Box
 				sx={{
 					p: 2,
-					// textAlign: "center",
+					textAlign: "center",
 					width: "100%",
 					backgroundColor: "#1e1e1e",
 					color: "white",
@@ -79,10 +93,9 @@ export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 				}}
 			>
 				<Box>
-					<h2>Create Subscription NFT</h2>
-					<br />
-					<Box sx={{ bgColor: "white", width: "80%" }}>
-						<FormControl fullWidth>
+					<h2>Create subscription NFT</h2>
+					<Box sx={{ bgColor: "white" }}>
+						<FormControl fullWidth sx={{ mt: 2 }}>
 							<TextField
 								id="tokenName"
 								label="Token Name"
@@ -112,30 +125,37 @@ export const EnableSubscription = ({ isOpen, handleExternalClose }) => {
 							<TextField
 								id="tokenPrice"
 								label="Token Price"
+								type="number"
 								variant="outlined"
 								value={tokenPrice}
 								onChange={(e) => {
+									if (parseInt(e.target.value) <= 0) return;
 									setTokenPrice(e.target.value);
 								}}
 								size="small"
 							/>
 						</FormControl>
 					</Box>
-					<Box sx={{ textAlign: "right" }}>
+					<Box>
 						<Button
 							sx={{
-								// cursor: "pointer",
-								// backgroundColor: "#256afe",
-								// borderRadius: "4px",
-								// p: 2,
-								// minWidth: "100px",
+								minWidth: "200px",
 								mt: 2,
+								backgroundColor: "#28E0B9",
+								fontWeight: "600",
+								cursor: "pointer",
+								borderRadius: "8px",
+								"&:hover": {
+									backgroundColor: "#28E0B9",
+								},
 							}}
 							variant="contained"
 							onClick={() => createSubscription()}
 						>
 							{loading ? (
-								<CircularProgress size={14} sx={{ color: "white" }} />
+								<Box p={0}>
+									<CircularProgress size={24} sx={{ color: "#161108" }} />
+								</Box>
 							) : (
 								"Create Subscription NFT"
 							)}

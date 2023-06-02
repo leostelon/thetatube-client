@@ -5,10 +5,9 @@ import TopNavbar from "../components/TopNavbar";
 import { Button, IconButton, Skeleton, styled } from "@mui/material";
 
 import { RiImageEditLine } from "react-icons/ri";
-import { MdVideoFile } from "react-icons/md";
+import { HiOutlineSparkles } from "react-icons/hi";
 
 import bannerImage from "../assets/wall3.jpg";
-import { purple, teal } from "@mui/material/colors";
 import { Home } from "./Home";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,7 +17,7 @@ import { EnableSubscription } from "../components/EnableSubscription";
 import { toast } from "react-toastify";
 
 import noImage from "../assets/No-Image-Placeholder.png";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineCloudUpload, AiOutlineEdit } from "react-icons/ai";
 import { UpdateNameDialog } from "../components/UpdateNameDialog";
 import { getUserVideos } from "../database/video";
 
@@ -43,7 +42,7 @@ export default function ProfileDesign() {
 				<TopNavbar />
 				{ProfileBox()}
 				{videos?.length > 0 && <Home videos={videos} />}
-				{videos?.length == 0 && (
+				{videos?.length === 0 && (
 					<Box sx={{ display: "flex", justifyContent: "center", pr: 8 }}>
 						<Box sx={{ height: "200px", width: "200px", cursor: "pointer" }}>
 							<img
@@ -79,8 +78,6 @@ const ProfileBox = () => {
 		};
 		checkUserProfile();
 	}, [userAddress]);
-
-	console.log(isUserProfile);
 
 	function handleTokenDialogClose() {
 		setSubscriptionOpen(false);
@@ -198,23 +195,32 @@ const ProfileBox = () => {
 								<Box sx={{ pr: 2 }}>
 									<PurpleColorButton
 										variant="contained"
-										startIcon={<MdVideoFile />}
 										onClick={() => {
 											navigate("/upload");
 										}}
 									>
+										<AiOutlineCloudUpload
+											size={20}
+											style={{ marginRight: "4px" }}
+										/>
 										Upload New Videos
 									</PurpleColorButton>
 								</Box>
 							)}
-							<Box sx={{ pr: 2 }}>
-								<ColorButton
-									variant="contained"
-									onClick={() => setSubscriptionOpen(true)}
-								>
-									Enable subscription
-								</ColorButton>
-							</Box>
+							{isUserProfile && !user.premium && (
+								<Box sx={{ pr: 2 }}>
+									<ColorButton
+										variant="contained"
+										onClick={() => setSubscriptionOpen(true)}
+									>
+										<HiOutlineSparkles
+											size={20}
+											style={{ marginRight: "4px" }}
+										/>
+										Enable subscription
+									</ColorButton>
+								</Box>
+							)}
 						</ProfileDetailsContainerRight>
 						<EnableSubscription
 							isOpen={subscriptionOpen}
@@ -298,20 +304,23 @@ const ProfileDetailsContainerRight = styled(Box)({
 
 const ColorButton = styled(Button)(({ theme }) => ({
 	whiteSpace: "nowrap",
-	backgroundColor: teal[500],
+	backgroundColor: "#28E0B9",
+	fontWeight: "600",
+	cursor: "pointer",
 	"&:hover": {
-		backgroundColor: teal[700],
+		backgroundColor: "#28E0B9",
 	},
-
-	borderRadius: "10px",
+	borderRadius: "8px",
 }));
 
 const PurpleColorButton = styled(Button)(({ theme }) => ({
 	whiteSpace: "nowrap",
-	backgroundColor: purple[800],
+	backgroundColor: "#EFCD80",
+	color: "#161108",
+	fontWeight: "600",
+	cursor: "pointer",
 	"&:hover": {
-		backgroundColor: purple[900],
+		backgroundColor: "#EFCD80",
 	},
-
-	borderRadius: "10px",
+	borderRadius: "8px",
 }));

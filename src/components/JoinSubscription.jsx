@@ -1,7 +1,10 @@
-import { Box, Button, CircularProgress, Dialog } from "@mui/material";
+import "../styles/JoinSubscription.css";
+import { Box, CircularProgress, Dialog } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getWalletAddress, switchChain } from "../utils/wallet";
 import ThetaTubeInterface from "../contracts/ThetaTube.json";
+import Web3 from "web3";
+import { toast } from "react-toastify";
 
 export default function JoinSubscription({
 	isOpen,
@@ -67,56 +70,73 @@ export default function JoinSubscription({
 
 		await switchChain();
 
-		const resp = await contract.methods
+		await contract.methods
 			.safeMint()
 			.send(transferDetails)
-			.on("receipt", async function (receipt) {
-				// await enableSubscription(
-				// 	receipt.events.TokenDeployed.returnValues.tokenAddress
-				// );
+			.on("receipt", async function () {
 				setPremiumLoading(false);
-				alert("Bought Premium subscription!");
+				toast("Bought Premium subscription!", { type: "success" });
+                await new Promise((res, rej) => {
+					setTimeout(() => {
+						window.location.reload();
+					}, 3000);
+				});
 			});
-		console.log(resp);
 		setPremiumLoading(false);
 		handleClose();
 	}
 	return (
 		<div>
-			<Dialog open={open} maxWidth="xs" onClose={handleClose}>
+			<Dialog open={open} minWidth="md" onClose={handleClose}>
 				<Box
 					sx={{
-						p: 2,
-						// textAlign: "center",
-						// width: "100%",
-						backgroundColor: "#46505a",
-						color: "white",
+						backgroundColor: "#2a2a2a",
+						padding: "12px",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						px: 8,
 					}}
 				>
-					<Box>
-						<h2>Join Premium Details :</h2>
-						<br />
-						<h3>
-							Price :{" "}
-							{transferDetails?.value
-								? transferDetails.value
-								: "fetching price ..."}
-						</h3>
-						<Box sx={{ textAlign: "right" }}>
-							<Button
-								sx={{
-									mt: 2,
-								}}
-								variant="contained"
-								onClick={() => joinPremium()}
-							>
-								{premiumLoading ? (
-									<CircularProgress size={14} sx={{ color: "white" }} />
-								) : (
-									"Join Premium Subscription "
-								)}
-							</Button>
-						</Box>
+					<h2 style={{ fontSize: "24px", fontWeight: "500" }}>Premium🦋</h2>
+					<br />
+					<Box
+						sx={{ display: "flex", flexDirection: "column", fontWeight: "500" }}
+					>
+						<p style={{ marginBottom: "6px" }}>
+							✅&nbsp; Unlimited content from creator
+						</p>
+						<p style={{ marginBottom: "6px" }}>
+							✅&nbsp; Access to special features
+						</p>
+						<p style={{ marginBottom: "6px" }}>✅&nbsp; One time payment</p>
+						<p style={{ marginBottom: "6px" }}>✅&nbsp; Free forever </p>
+					</Box>
+					<br />
+					<h1 style={{ fontSize: "38px" }}>
+						{transferDetails?.value
+							? Web3.utils.fromWei(transferDetails.value)
+							: "..."}
+						&nbsp;TFUEL<span style={{ fontSize: "12px" }}> /forever</span>
+					</h1>
+					<Box
+						sx={{
+							cursor: "pointer",
+							color: "white",
+							width: "fit-content",
+							fontWeight: "600",
+							minWidth: "100px",
+							display: "flex",
+							justifyContent: "center",
+						}}
+						onClick={joinPremium}
+						className="buy-now"
+					>
+						{premiumLoading ? (
+							<CircularProgress size={14} sx={{ color: "white" }} />
+						) : (
+							"Join Premium"
+						)}
 					</Box>
 				</Box>
 			</Dialog>

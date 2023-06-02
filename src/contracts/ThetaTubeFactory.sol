@@ -8,6 +8,7 @@ contract Factory {
     address[] public nfts;
     uint256 public nftsCount;
     mapping(address => address) public owner; // First address -> Token Address, Second address -> Creator
+    mapping(address => address) public ownerToAddress; // First address -> Creator Address, Second address -> Token Address
     mapping(address => uint256) public price;
 
     event TokenDeployed(address indexed tokenAddress);
@@ -23,6 +24,7 @@ contract Factory {
 
         nftsCount += 1;
         owner[address(nft)] = msg.sender;
+        ownerToAddress[msg.sender] = address(nft);
         price[address(nft)] = _price;
 
         emit TokenDeployed(address(nft));

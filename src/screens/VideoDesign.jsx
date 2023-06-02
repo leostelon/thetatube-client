@@ -111,6 +111,7 @@ const VideoBox = () => {
 	// Get subscribers count
 	async function getSubscribersCount() {
 		try {
+			console.log("calling");
 			if (!creator || !creator.premiumContractAddress) return;
 
 			const contract = new window.web3.eth.Contract(
@@ -208,14 +209,11 @@ const VideoBox = () => {
 										style={{
 											position: "absolute",
 											right: 0,
+											color: "white",
 										}}
+										className="buy-now"
 									>
-										{
-											// premiumLoading ? (
-											// 	<CircularProgress />
-											// ) :
-											boughtPremium ? "Premium Subscriber" : "Join Premium"
-										}
+										{boughtPremium ? "Premium Subscriber✨" : "Join Premium"}
 									</ColorButton>
 									<JoinSubscription
 										isOpen={joinSubscriptionOpen}
