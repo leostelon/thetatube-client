@@ -1,70 +1,62 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# Theta+📺
 
-In the project directory, you can run:
+Theta+ (Thetaplus) is a decentralized version of [Lick](https://kick.com/)/[YouTube](https://youtube.com/), powered by [Theta Network](https://www.thetatoken.org/), allowing users to upload and stream entertaining content and make a living out of it.
 
-### `npm start`
+![Home Page](https://9d7487a2-be2a-42e2-a2ec-5e5b6d457821-c6413e.spheron.app/Screenshot_122.png)
+[](https://kissingface.xyz)<center>https://thetaplus.xyz</center>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Get Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The codebase of GUI for the platform is built using React.js. Smart contracts written in Solidity. Contract's are deployed in Theta Network and Client in Vercel. 
 
-### `npm test`
+Find all the respective codebase below. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. [Client](https://github.com/leostelon/thetatube-client)
+2. [Contracts](https://github.com/leostelon/thetatube-client/tree/main/src/contracts)
+3. [Polybase](https://github.com/leostelon/thetatube-client/tree/main/src/database)
 
-### `npm run build`
+**Website**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[thetaplus.xyz](https://thetaplus.xyz/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Accomplishments/Milestones
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ - Support for any user to create and publish NFT's as premium passes🎟️.
+ - Added DRM support. Token gated content🚪.
+ - Upload upto 1080px videos.
+ - Premium purchase using TFUEL.
 
-### `npm run eject`
+# Technology
+- **Theta Video API** a decentralized video delivery network, we were able to distribute content at scale and also lower our cost to encode, store and deliver video.  [[know more]](https://www.thetavideoapi.com/)
+ - **Theta DRM** to token gate content. 
+ - **Theta EVM** to store and retrieve subscription based NFT's. 
+ - Database,  is handled by **Polybase**, the database for web3. [[know more]](https://polybase.xyz/)
+	- Find schemas and logic [here](https://github.com/leostelon/thetatube-client/tree/main/src/database).
+- Host and maintained in **Vercel**. [[know more]](https://vercel.com/)
+- Thumbnails, profile pictures and media are stored in IPFS using [nft.storage](https://nft.storage/). Visit the docs to get the key if your running it locally.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Follow the below steps to run it locally.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Client💻
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone Repo.
+> $ git clone https://github.com/leostelon/thetatube-client kissingface-client
+>  $ cd kissingface-client
+2. Add the .env file in the root directory. Replace the value accordingly.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+REACT_APP_THETA_API_KEY=<< theta-api-key >>
+REACT_APP_THETA_SECRET=<< theta-secret >>
+REACT_APP_POLYBASE_NAMESPACE=<< visit polybase docs to get the key>>
+REACT_APP_JWT_SECRET=somesecret
+REACT_APP_NFTSTORAGE_KEY=<<nft.storage.key>>
+REACT_APP_IPFS_BASE_URL=https://ipfs.io/ipfs
+	  
+4. Run the client!
+> $ npm run start
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## What next?👨‍💻
+ - [x] MVP
+ - [x] Polybase models
+ - [ ] Live Stream Support
