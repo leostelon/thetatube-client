@@ -54,6 +54,14 @@ const Banner = () => {
 			<AliceCarousel
 				mouseTracking
 				disableButtonsControls
+				responsive={{
+					0: {
+						items: 1,
+					},
+					1000: {
+						items: 2,
+					},
+				}}
 				items={[
 					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/person.jpg",
 					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/shark.jpg",
@@ -65,9 +73,8 @@ const Banner = () => {
 						role="presentation"
 						style={{
 							height: "300px",
-							width: `100%`,
+							width: `98%`,
 							borderRadius: "10px",
-							minWidth: 0,
 						}}
 						alt={"banner-" + i}
 					/>
