@@ -136,6 +136,8 @@ const CardDetailsContainer = styled.div`
 const CardProfile = styled.div`
 	height: 36px;
 	width: 36px;
+	min-height: 36px;
+	min-width: 36px;
 	margin-right: 12px;
 `;
 
