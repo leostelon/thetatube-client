@@ -1,4 +1,9 @@
-import { Box, CircularProgress, CssBaseline, IconButton } from "@mui/material";
+import {
+	Box,
+	CssBaseline,
+	IconButton,
+	Skeleton,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getVideo, getVideos } from "../database/video";
@@ -111,7 +116,6 @@ const VideoBox = () => {
 	// Get subscribers count
 	async function getSubscribersCount() {
 		try {
-			console.log("calling");
 			if (!creator || !creator.premiumContractAddress) return;
 
 			const contract = new window.web3.eth.Contract(
@@ -142,7 +146,23 @@ const VideoBox = () => {
 				}}
 			>
 				{loading ? (
-					<CircularProgress />
+					// <CircularProgress />
+					<Box width={"100%"} height={"80vh"} mr={4} display="flex">
+						<Skeleton
+							width={"80%"}
+							height={"100%"}
+							sx={{ transform: "none", mr: 1 }}
+						/>
+						<Box width={"20%"}>
+							{Array.from({ length: 4 }).map((i) => (
+								<Skeleton
+									width={"100%"}
+									height={"25%"}
+									sx={{ transform: "none", ml: 1, mb: 1 }}
+								/>
+							))}
+						</Box>
+					</Box>
 				) : (
 					video && (
 						<ViewGridContainer>
