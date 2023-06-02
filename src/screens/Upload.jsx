@@ -9,7 +9,6 @@ import {
 	Checkbox,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import TopNavbar from "../components/TopNavbar";
 import LeftDrawer from "../components/LeftDrawer";
 import { toast } from "react-toastify";
 import { RiImageEditLine } from "react-icons/ri";
@@ -23,7 +22,6 @@ export function Upload() {
 			<CssBaseline />
 			<LeftDrawer />
 			<Box component="main" sx={{ flexGrow: 1 }}>
-				<TopNavbar />
 				<UploadBox />
 			</Box>
 		</Box>
@@ -75,7 +73,6 @@ const UploadBox = () => {
 		video.preload = "metadata";
 		video.onloadedmetadata = function () {
 			window.URL.revokeObjectURL(video.src);
-			console.log("duration ====", video.duration);
 			if (video.duration !== null) setDuration(video.duration);
 		};
 
@@ -112,7 +109,7 @@ const UploadBox = () => {
 			checked ? loggedInAddress : ""
 		);
 
-		toast("Successfully uploaded your dataset", { type: "success" });
+		toast("Successfully uploaded your video", { type: "success" });
 		setUploadLoading(false);
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 		navigate(`/profile/${loggedInAddress}`);
@@ -122,73 +119,21 @@ const UploadBox = () => {
 		<Box
 			sx={{
 				p: 3,
-				// display: "flex",/
-				// flexDirection: "column",
-				// alignItems: "center",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
 				// justifyContent: "center",
 				// minWidth: "300px",
 			}}
 		>
 			<h1>Upload</h1>
-			<Box>Add your video and upload and post it in the theata network</Box>
+			<Box>Upload your video's to the Theta Network</Box>
 			<Box sx={{ display: "flex", mt: 3, flexWrap: "wrap" }}>
-				<Box sx={{ mt: 1, mr: 2 }}>
-					<h4>Thumbnail Preview :</h4>
-
-					{thumbnailFilePreview ? (
-						<Box
-							sx={{
-								width: "360px",
-								height: "240px",
-								borderRadius: "10px",
-
-								backgroundImage: `url(${thumbnailFilePreview})`,
-								backgroundRepeat: "no-repeat",
-								backgroundSize: "cover",
-								backgroundPosition: "center",
-
-								display: "flex",
-								justifyContent: "flex-end",
-
-								mt: 1,
-							}}
-						>
-							<IconButtonHolder
-								sx={{ m: 1 }}
-								component="label"
-								onChange={(e) => {
-									if (e.target.files[0]?.type?.split("/")[0] !== "image")
-										toast("Please select a file with type image!", {
-											type: "info",
-										});
-									else setThumbnailFile(e.target.files[0]);
-								}}
-							>
-								<RiImageEditLine />
-								<input type="file" hidden />
-							</IconButtonHolder>
-						</Box>
-					) : (
-						<Button
-							component="label"
-							onChange={(e) => {
-								if (e.target.files[0]?.type?.split("/")[0] !== "image")
-									toast("Please select a file with type image!");
-								else setThumbnailFile(e.target.files[0]);
-							}}
-						>
-							<input type="file" hidden />
-
-							<FileUploadContainer />
-						</Button>
-					)}
-				</Box>
 				<Box style={{ minWidth: "30%" }}>
-					<h4>Details :</h4>
-
 					<Box
 						sx={{
 							mt: 1,
+							mb: "24px",
 						}}
 					>
 						<TextField
@@ -196,6 +141,11 @@ const UploadBox = () => {
 							size="small"
 							variant="outlined"
 							sx={{ p: 0, my: 1 }}
+							InputLabelProps={{
+								style: {
+									color: "#7e7e7e",
+								},
+							}}
 							fullWidth
 							value={name}
 							onChange={(e) => {
@@ -203,7 +153,7 @@ const UploadBox = () => {
 							}}
 						/>
 					</Box>
-					<Box>
+					<Box sx={{ mb: "24px" }}>
 						<TextField
 							multiline
 							minRows={3}
@@ -212,15 +162,107 @@ const UploadBox = () => {
 							size="small"
 							variant="outlined"
 							fullWidth
+							InputLabelProps={{
+								style: {
+									color: "#7e7e7e",
+								},
+							}}
 							value={description}
 							onChange={(e) => {
 								setDescription(e.target.value);
 							}}
 						/>
 					</Box>
+					<Box display={"flex"}>
+						<Box mr="10px">
+							{thumbnailFilePreview ? (
+								<Box
+									sx={{
+										width: "360px",
+										height: "240px",
+										borderRadius: "10px",
+
+										backgroundImage: `url(${thumbnailFilePreview})`,
+										backgroundRepeat: "no-repeat",
+										backgroundSize: "cover",
+										backgroundPosition: "center",
+
+										display: "flex",
+										justifyContent: "flex-end",
+
+										mt: 1,
+									}}
+								>
+									<IconButtonHolder
+										sx={{ m: 1 }}
+										component="label"
+										onChange={(e) => {
+											if (e.target.files[0]?.type?.split("/")[0] !== "image")
+												toast("Please select a file with type image!", {
+													type: "info",
+												});
+											else setThumbnailFile(e.target.files[0]);
+										}}
+									>
+										<RiImageEditLine />
+										<input type="file" hidden />
+									</IconButtonHolder>
+								</Box>
+							) : (
+								<Button
+									component="label"
+									onChange={(e) => {
+										if (e.target.files[0]?.type?.split("/")[0] !== "image")
+											toast("Please select a file with type image!", {
+												type: "info",
+											});
+										else setThumbnailFile(e.target.files[0]);
+									}}
+									sx={{ paddingLeft: "0px" }}
+								>
+									<input type="file" hidden />
+
+									<FileUploadContainer />
+								</Button>
+							)}
+						</Box>
+						<Box ml="10px">
+							{videoFilePreview && (
+								<Box>
+									<Box sx={{ width: "360px", height: "240px", mt: 0.5 }}>
+										<iframe
+											src={videoFilePreview}
+											style={{
+												height: "100%",
+												width: "100%",
+												borderRadius: "10px",
+												border: "1px solid white",
+											}}
+											autoPlay
+											title="video-preview"
+										/>
+									</Box>
+								</Box>
+							)}
+						</Box>
+					</Box>
 					<Box>
-						<Button variant="contained" component="label" sx={{ m: 1 }}>
-							{file ? "Change Video" : "Select Video"}
+						<Button
+							variant="contained"
+							component="label"
+							sx={{
+								m: 1,
+								backgroundColor: "transparent",
+								color: "#28E0B9",
+								fontWeight: "bold",
+								border: "1px solid #28E0B9",
+								"&:hover": {
+									backgroundColor: "#28E0B9",
+									color: "black",
+								},
+							}}
+						>
+							{file ? "Change video" : "Select video"}
 							<input
 								type="file"
 								hidden
@@ -231,38 +273,78 @@ const UploadBox = () => {
 								}}
 							/>
 						</Button>
-						<Box>
-							<Checkbox checked={checked} onChange={handleCheckChange} />
-							Enable only premium user's to watch
-						</Box>
-						<ColorButton
-							variant="contained"
-							color={"secondary"}
-							sx={{ m: 1 }}
-							onClick={uploadFile}
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "flex-start",
+								backgroundColor: "#28E0B933",
+								mt: 2,
+								mb: 2,
+								borderRadius: "4px",
+								p: 1,
+								py: 2,
+							}}
 						>
-							{uploadLoading ? (
-								<CircularProgress size={14} sx={{ color: "white" }} />
-							) : (
-								"Upload Video"
-							)}
-						</ColorButton>
+							<Box sx={{ maxWidth: "50vw" }}>
+								<Checkbox
+									sx={{
+										color: "#28E0B9",
+										"&.Mui-checked": {
+											color: "#28E0B9",
+										},
+									}}
+									checked={checked}
+									onChange={handleCheckChange}
+								/>
+								Enable only premium user's to watch
+							</Box>
+							<Box
+								sx={{
+									textAlign: "start",
+									color: "#8d8d8d",
+									fontWeight: "500",
+									px: 1,
+								}}
+							>
+								✨ Enabling this allows only the users who have purchased your
+								subscription NFT.
+							</Box>
+						</Box>
+
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "right",
+								width: "100%",
+								mb: "36px",
+							}}
+						>
+							<ColorButton
+								variant="contained"
+								color={"secondary"}
+								sx={{
+									p: 1.5,
+									fontWeight: "bold",
+									fontSize: "16px",
+									backgroundColor: "#28E0B9",
+									"&:hover": {
+										backgroundColor: "#28E0B9",
+									},
+									width: "100%",
+									textAlign: "right",
+								}}
+								onClick={uploadFile}
+							>
+								{uploadLoading ? (
+									<CircularProgress size={14} sx={{ color: "white" }} />
+								) : (
+									"Upload Video🚀"
+								)}
+							</ColorButton>
+						</Box>
 					</Box>
 				</Box>
-				{videoFilePreview && (
-					<Box sx={{ ml: 2 }}>
-						<h4>Video Preview :</h4>
-
-						<Box sx={{ width: "360px", height: "240px", mt: 1.5 }}>
-							<iframe
-								src={videoFilePreview}
-								style={{ height: "100%", width: "100%", borderRadius: "10px" }}
-								autoPlay
-								title="video-preview"
-							/>
-						</Box>
-					</Box>
-				)}
 			</Box>
 		</Box>
 	);
@@ -272,7 +354,8 @@ const FileUploadContainer = (props) => {
 	return (
 		<Box
 			sx={{
-				border: "2px dashed ",
+				border: "1.5px dashed darkgrey",
+				color: "white",
 				borderRadius: "10px",
 				width: "360px",
 				height: "240px",
@@ -307,8 +390,8 @@ const IconButtonHolder = styled(IconButton)({
 
 const ColorButton = styled(Button)(() => ({
 	backgroundColor: "#e1b24b",
+	fontWeight: "bold",
 	"&:hover": {
 		backgroundColor: "#d2a033",
 	},
-	marginRight: "8px",
 }));

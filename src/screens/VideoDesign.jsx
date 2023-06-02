@@ -198,6 +198,7 @@ const VideoBox = () => {
 												backgroundPosition: "center",
 												backgroundSize: "cover",
 												backgroundRepeat: "no-repeat",
+												cursor: "pointer",
 											}}
 											style={{
 												height: "100%",
@@ -205,10 +206,20 @@ const VideoBox = () => {
 												objectFit: "cover ",
 												borderRadius: "10px",
 											}}
+											onClick={() => {
+												if (creator?.id) navigate("/profile/" + creator.id);
+											}}
 										></Box>
 									</VideoProfile>
 									<VideoDetails>
-										<VideoOwner>
+										<VideoOwner
+											sx={{
+												cursor: "pointer",
+											}}
+											onClick={() => {
+												if (creator?.id) navigate("/profile/" + creator.id);
+											}}
+										>
 											{creator?.id && getShortAddress(creator.id)}
 											{/* owner */}
 										</VideoOwner>
