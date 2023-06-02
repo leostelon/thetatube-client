@@ -407,13 +407,12 @@ const ViewGridContainer = styled.div`
 // * video
 
 const VideoContainerBox = styled.div`
-	width: 100%;
-	max-width: calc(100vw - 260px - 440px);
+	width: calc(100vw - 260px - 440px);
 	margin-bottom: 20px;
 	padding-right: 30px;
 
 	@media only screen and (max-width: 1200px) {
-		max-width: calc(100vw - 260px);
+		width: calc(100vw - 300px);
 	}
 `;
 
