@@ -42,7 +42,19 @@ export default function ProfileDesign() {
 			<Box component="main" sx={{ flexGrow: 1 }}>
 				<TopNavbar />
 				{ProfileBox()}
-				<Home videos={videos} />
+				{videos?.length > 0 && <Home videos={videos} />}
+				{videos?.length == 0 && (
+					<Box sx={{ display: "flex", justifyContent: "center", pr: 8 }}>
+						<Box sx={{ height: "200px", width: "200px", cursor: "pointer" }}>
+							<img
+								style={{ width: "100%", height: "100%" }}
+								src="/images/zerp2.svg"
+								alt=""
+								srcSet=""
+							/>
+						</Box>
+					</Box>
+				)}
 			</Box>
 		</Box>
 	);
@@ -181,7 +193,7 @@ const ProfileBox = () => {
 								</Box>
 							</OwnerDetails>
 						</ProfileDetailsContainerLeft>
-						<ProfileDetailsContainerRight>
+						<ProfileDetailsContainerRight style={{ paddingRight: "20px" }}>
 							{isUserProfile && (
 								<Box sx={{ pr: 2 }}>
 									<PurpleColorButton
@@ -195,7 +207,7 @@ const ProfileBox = () => {
 									</PurpleColorButton>
 								</Box>
 							)}
-							<Box sx={{ mr: 4, pr: 2 }}>
+							<Box sx={{ pr: 2 }}>
 								<ColorButton
 									variant="contained"
 									onClick={() => setSubscriptionOpen(true)}
@@ -279,12 +291,13 @@ const ProfileDetailsContainerRight = styled(Box)({
 	display: "flex",
 	justifyContent: "flex-end",
 	alignItems: "flex-end",
-
+	flexWrap: "wrap",
 	minWidth: "450px",
 	minHeight: "80px",
 });
 
 const ColorButton = styled(Button)(({ theme }) => ({
+	whiteSpace: "nowrap",
 	backgroundColor: teal[500],
 	"&:hover": {
 		backgroundColor: teal[700],
@@ -294,6 +307,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 const PurpleColorButton = styled(Button)(({ theme }) => ({
+	whiteSpace: "nowrap",
 	backgroundColor: purple[800],
 	"&:hover": {
 		backgroundColor: purple[900],
