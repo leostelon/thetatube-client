@@ -1,9 +1,4 @@
-import {
-	Box,
-	CssBaseline,
-	IconButton,
-	Skeleton,
-} from "@mui/material";
+import { Box, CssBaseline, IconButton, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getVideo, getVideos } from "../database/video";
@@ -401,11 +396,14 @@ const ViewGridContainer = styled.div`
 // * video
 
 const VideoContainerBox = styled.div`
-	flex-grow: 1;
-
-	min-width: 50vw;
+	width: 100%;
+	max-width: calc(100vw - 260px - 440px);
 	margin-bottom: 20px;
 	padding-right: 30px;
+
+	@media only screen and (max-width: 1200px) {
+		max-width: calc(100vw - 260px);
+	}
 `;
 
 const VideoContainer = styled.div`
@@ -495,7 +493,7 @@ const VideoDescription = styled.div`
 `;
 // * recommended
 const RecommendedContainer = styled.div`
-	width: 420px;
+	width: 380px;
 `;
 const RecommendedBox = styled.div`
 	display: flex;
@@ -531,7 +529,7 @@ const RecommendedTitle = styled.div`
 	font-size: 13px;
 	color: #f1f1f1;
 	max-width: 226px;
-	max-height: 4rem;
+	height: 20px;
 	overflow-y: hidden;
 	font-weight: 600;
 	margin-bottom: 4px;
