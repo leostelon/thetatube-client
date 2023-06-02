@@ -7,7 +7,6 @@ import { Button, IconButton, Skeleton, styled } from "@mui/material";
 import { RiImageEditLine } from "react-icons/ri";
 import { MdVideoFile } from "react-icons/md";
 
-// import bannerImage from "../assets/profileBack.jpg";
 import bannerImage from "../assets/wall3.jpg";
 import { purple, teal } from "@mui/material/colors";
 import { Home } from "./Home";
@@ -57,6 +56,19 @@ const ProfileBox = () => {
 	const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 	const [enableUserEdit, setEnableUserEdit] = useState(false);
 	const navigate = useNavigate();
+
+	const [isUserProfile, setIsUserProfile] = useState(false);
+	useEffect(() => {
+		const checkUserProfile = async () => {
+			const loggedinaddress = localStorage.getItem("address");
+			if (loggedinaddress === userAddress) {
+				setIsUserProfile(true);
+			}
+		};
+		checkUserProfile();
+	}, [userAddress]);
+
+	console.log(isUserProfile);
 
 	function handleTokenDialogClose() {
 		setSubscriptionOpen(false);
@@ -131,18 +143,20 @@ const ProfileBox = () => {
 											: `url(${noImage})`,
 									}}
 								>
-									<IconButtonHolder
-										sx={{
-											color: "white",
-											backgroundColor: "#191C22",
-											borderRadius: "5px",
-										}}
-										component="label"
-										onChange={updateProfileImage}
-									>
-										<RiImageEditLine />
-										<input type="file" hidden />
-									</IconButtonHolder>
+									{isUserProfile && (
+										<IconButtonHolder
+											sx={{
+												color: "white",
+												backgroundColor: "#191C22",
+												borderRadius: "5px",
+											}}
+											component="label"
+											onChange={updateProfileImage}
+										>
+											<RiImageEditLine />
+											<input type="file" hidden />
+										</IconButtonHolder>
+									)}
 								</ProfileImage>
 							)}
 							<OwnerDetails>
@@ -155,30 +169,33 @@ const ProfileBox = () => {
 								/>
 								<Box sx={{ display: "flex", alignItems: "center" }}>
 									<h4>{user.username ? `@${user.username}` : "Unnamed"}</h4>
-
-									<IconButton
-										onClick={() => {
-											setEnableUserEdit(true);
-										}}
-									>
-										<AiOutlineEdit />
-									</IconButton>
+									{isUserProfile && (
+										<IconButton
+											onClick={() => {
+												setEnableUserEdit(true);
+											}}
+										>
+											<AiOutlineEdit />
+										</IconButton>
+									)}
 								</Box>
 							</OwnerDetails>
 						</ProfileDetailsContainerLeft>
 						<ProfileDetailsContainerRight>
-							<Box>
-								<PurpleColorButton
-									variant="contained"
-									startIcon={<MdVideoFile />}
-									onClick={() => {
-										navigate("/upload");
-									}}
-								>
-									Upload New Videos
-								</PurpleColorButton>
-							</Box>
-							<Box sx={{ marginRight: "20px" }}>
+							{isUserProfile && (
+								<Box sx={{ pr: 2 }}>
+									<PurpleColorButton
+										variant="contained"
+										startIcon={<MdVideoFile />}
+										onClick={() => {
+											navigate("/upload");
+										}}
+									>
+										Upload New Videos
+									</PurpleColorButton>
+								</Box>
+							)}
+							<Box sx={{ mr: 4, pr: 2 }}>
 								<ColorButton
 									variant="contained"
 									onClick={() => setSubscriptionOpen(true)}
@@ -260,7 +277,7 @@ const OwnerDetails = styled(Box)({
 
 const ProfileDetailsContainerRight = styled(Box)({
 	display: "flex",
-	justifyContent: "space-between",
+	justifyContent: "flex-end",
 	alignItems: "flex-end",
 
 	minWidth: "450px",

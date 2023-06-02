@@ -35,7 +35,7 @@ export async function uploadVideo(
 		}
 
 		// Upload to polybase
-		await createVideo(
+		const res = await createVideo(
 			v.id,
 			name,
 			description,
@@ -45,6 +45,7 @@ export async function uploadVideo(
 			thumbnailResponse,
 			duration
 		);
+		return res?.data;
 	} catch (error) {
 		console.log(error);
 		toast(error.message);

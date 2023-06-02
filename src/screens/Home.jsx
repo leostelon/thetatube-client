@@ -47,14 +47,21 @@ export const Home = ({ videos: withVideos }) => {
 								key={v.id}
 								sx={{ height: "320px", width: "340px" }}
 							>
-								<VideoCard onClick={() => navigate("/video/" + v.id)} key={i}>
+								<VideoCard
+									onClick={() => navigate("/video/" + v.id)}
+									key={v.id}
+								>
 									<Thumbnail
 										thumbnail={v?.thumbnail ? v.thumbnail : ""}
 										length={v.length}
 									/>
 
 									<CardDetailsContainer>
-										<CardProfile>
+										<CardProfile
+											onClick={() => {
+												if (v.creator.id) navigate(`/profile/${v.creator.id}`);
+											}}
+										>
 											<img
 												src={
 													v.creator.profile_image &&
@@ -141,7 +148,7 @@ const CardDetails = styled.div`
 const CardTitle = styled.div`
 	font-size: 16px;
 	font-weight: 500;
-	margin-bottom: 6px;
+	/* margin-bottom: 6px; */
 
 	/* color: #f1f1f1; */
 	color: white;
