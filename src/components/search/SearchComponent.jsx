@@ -1,20 +1,29 @@
 import "./search.css";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { InputBase, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 
 export function SearchComponent() {
 	const navigate = useNavigate();
-	const [input, setInput] = useState("");
+
+	let [searchParams, setSearchParams] = useSearchParams();
+	const { pathname } = useLocation();
+
+	const query = searchParams.get("query");
 
 	const handleKeyDown = (event) => {
 		const value = event.target.value;
 		if (event.key === "Enter" && value !== "") {
-			navigate(`/browse?&query=${value}`);
+			setSearchParams({ query: value });
 		}
 	};
+
+	const searchInput = useCallback(
+		(element) => (element ? element.focus() : null),
+		[]
+	);
 
 	return (
 		<div>
@@ -36,10 +45,15 @@ export function SearchComponent() {
 				<InputBase
 					sx={{ ml: 0.5, flex: 1, fontSize: "14px" }}
 					placeholder="Search"
-					inputProps={{ "aria-label": "search" }}
-					value={input}
-					onInput={(e) => setInput(e.target.value)}
-					onKeyDown={handleKeyDown}
+					inputProps={{ "aria-label": "search", ref: searchInput }}
+					value={query ? query : ""}
+					onChange={(e) => {
+						// setInput(e.target.value);
+						if (pathname !== "browse") {
+							return navigate(`/browse?&query=${e.target.value}`);
+						}
+						setSearchParams({ query: e.target.value });
+					}}
 				/>
 			</Paper>
 		</div>

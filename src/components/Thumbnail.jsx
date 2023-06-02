@@ -26,7 +26,7 @@ export const Thumbnail = ({ thumbnail, length }) => {
 				currentTarget.src = NoImagePlaceholder;
 			}}
 		>
-			{length !== null && (
+			{length !== undefined && (
 				<RecommendedTime>{hmsConvertor(Math.round(length))}</RecommendedTime>
 			)}
 		</Box>

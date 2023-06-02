@@ -1,36 +1,31 @@
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LeftDrawer from "../components/LeftDrawer";
 import TopNavbar from "../components/TopNavbar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { searchVideos } from "../database/video";
 import { VideosLoading } from "../components/VideosLoading";
-import { Thumbnail } from "../components/Thumbnail";
-import NoImagePlaceholder from "../assets/No-Image-Placeholder.png";
 import styled from "styled-components";
-import { timeSince } from "../utils/time";
-import { getShortAddress } from "../utils/addressShort";
+import { Home } from "./Home";
 
 export const Browse = () => {
-	const search = useLocation().search;
-	const query = new URLSearchParams(search).get("query");
+	let [searchParams] = useSearchParams();
+
+	const query = searchParams.get("query");
 	const [videos, setVideos] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const navigate = useNavigate();
 
 	async function fetchVideos(query) {
 		setLoading(true);
 		const response = await searchVideos(query);
+		console.log(response);
 		setVideos(response);
 		setLoading(false);
 	}
 
 	useEffect(() => {
-		if (query && query !== "") {
-			fetchVideos(query);
-		} else {
-			fetchVideos("");
-		}
+		console.log(query);
+		fetchVideos(query);
 	}, [query]);
 
 	return (
@@ -42,71 +37,26 @@ export const Browse = () => {
 					<Box sx={{ px: 2, color: "white" }}>
 						<h2>Explore🧭</h2>
 					</Box>
-					{/* <Navbar /> */}
 					{loading ? (
 						<VideosLoading />
 					) : (
-						// <InfiniteScroll
-						// 	dataLength={videos?.length}
-						// 	// next={() => getUserAssets(userAddress)}
-						// 	// hasMore={true}
-						// 	loader={<p></p>}
-						// 	style={{ overflowX: "clip" }}
-						// >
-						<Grid
-							container
-							sx={{ p: 2, width: "100%" }}
-							// spacing={{ xs: 2, md: 3 }}
-							// columns={{ xs: 2, sm: 8, md: 10, lg: 10, xl: 15 }}
-						>
-							{videos.map((vid, i) => {
-								let v = vid.data;
-								return (
-									<Grid
-										item
-										mobile={12}
-										tablet={8}
-										laptop={4}
-										key={v.id}
-										sx={{ height: "320px", width: "340px" }}
+						<>
+							{videos?.length == 0 && (
+								<Box sx={{ display: "flex", justifyContent: "center", pr: 8 }}>
+									<Box
+										sx={{ height: "200px", width: "200px", cursor: "pointer" }}
 									>
-										<VideoCard
-											onClick={() => navigate("/video/" + v.id)}
-											key={i}
-										>
-											<Thumbnail thumbnail={v.thumbnail} />
-
-											<CardDetailsContainer>
-												<CardProfile>
-													<img
-														src={
-															v.creator.profile_image &&
-															v.creator.profile_image !== ""
-																? v.creator.profile_image
-																: NoImagePlaceholder
-														}
-														height="100%"
-														width="100%"
-														alt={v.id + v.timestamp}
-														style={{ borderRadius: "50%" }}
-													/>
-												</CardProfile>
-												<CardDetails>
-													<CardTitle>{v.name}</CardTitle>
-													<CardSmall>{getShortAddress(v.creator.id)}</CardSmall>
-													<CardSmall>
-														{v.views} views
-														<CardSmallSpan>
-															{timeSince(new Date(v.timestamp))} ago
-														</CardSmallSpan>
-													</CardSmall>
-												</CardDetails>
-											</CardDetailsContainer>
-										</VideoCard>
-									</Grid>
-								);
-							})}
-						</Grid>
+										<img
+											style={{ width: "100%", height: "100%" }}
+											src="/images/zerp2.svg"
+											alt=""
+											srcSet=""
+										/>
+									</Box>
+								</Box>
+							)}
+							{videos?.length > 0 && <Home videos={videos} />}
+						</>
 					)}
 				</Box>
 			</Box>
@@ -114,26 +64,26 @@ export const Browse = () => {
 	);
 };
 
-const VideoCard = styled.div`
-	/* flex: 1;
-	height: 320px;
-	width: 340px; */
-	/* background-color: black; */
+// const VideoCard = styled.div`
+// 	/* flex: 1;
+// 	height: 320px;
+// 	width: 340px; */
+// 	/* background-color: black; */
 
-	/* background: rgb(221, 221, 221);
-	background: linear-gradient(
-		90deg,
-		rgba(221, 221, 221, 1) 0%,
-		rgba(236, 236, 236, 1) 51%,
-		rgba(221, 221, 221, 1) 100%
-	); */
+// 	/* background: rgb(221, 221, 221);
+// 	background: linear-gradient(
+// 		90deg,
+// 		rgba(221, 221, 221, 1) 0%,
+// 		rgba(236, 236, 236, 1) 51%,
+// 		rgba(221, 221, 221, 1) 100%
+// 	); */
 
-	margin-right: 10px;
+// 	margin-right: 10px;
 
-	&:hover {
-		cursor: pointer;
-	}
-`;
+// 	&:hover {
+// 		cursor: pointer;
+// 	}
+// `;
 
 const CardDetailsContainer = styled.div`
 	display: flex;
@@ -174,3 +124,62 @@ const CardSmallSpan = styled.span`
 		margin: 0 4px;
 	}
 `;
+
+{
+	/* <Grid
+									container
+									sx={{ p: 2, width: "100%" }}
+									// spacing={{ xs: 2, md: 3 }}
+									// columns={{ xs: 2, sm: 8, md: 10, lg: 10, xl: 15 }}
+								>
+									{videos.map((vid, i) => {
+										let v = vid.data;
+										return (
+											<Grid
+												item
+												mobile={12}
+												tablet={8}
+												laptop={4}
+												key={v.id}
+												sx={{ height: "320px", width: "340px" }}
+											>
+												<VideoCard
+													onClick={() => navigate("/video/" + v.id)}
+													key={i}
+												>
+													<Thumbnail thumbnail={v.thumbnail} />
+
+													<CardDetailsContainer>
+														<CardProfile>
+															<img
+																src={
+																	v.creator.profile_image &&
+																	v.creator.profile_image !== ""
+																		? v.creator.profile_image
+																		: NoImagePlaceholder
+																}
+																height="100%"
+																width="100%"
+																alt={v.id + v.timestamp}
+																style={{ borderRadius: "50%" }}
+															/>
+														</CardProfile>
+														<CardDetails>
+															<CardTitle>{v.name}</CardTitle>
+															<CardSmall>
+																{getShortAddress(v.creator.id)}
+															</CardSmall>
+															<CardSmall>
+																{v.views} views
+																<CardSmallSpan>
+																	{timeSince(new Date(v.timestamp))} ago
+																</CardSmallSpan>
+															</CardSmall>
+														</CardDetails>
+													</CardDetailsContainer>
+												</VideoCard>
+											</Grid>
+										);
+									})}
+								</Grid> */
+}
