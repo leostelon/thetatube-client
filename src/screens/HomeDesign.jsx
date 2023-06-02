@@ -8,6 +8,7 @@ import { Home } from "./Home";
 
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
+import { useNavigate } from "react-router-dom";
 
 export default function HomeDesign() {
 	return (
@@ -33,6 +34,7 @@ export default function HomeDesign() {
 }
 
 const Banner = () => {
+	const navigate = useNavigate();
 	const handleDragStart = (e) => e.preventDefault();
 	return (
 		<BannerBox>
@@ -63,21 +65,38 @@ const Banner = () => {
 					},
 				}}
 				items={[
-					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/person.jpg",
-					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/shark.jpg",
-					"https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/tiktok.jpg",
+					{
+						link: "https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/person.jpg",
+						videoId: "video_8jizd39rgdi6ndaviyj90dyzma",
+					},
+					{
+						link: "https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/shark.jpg",
+						videoId: "video_8e1rk3bkjim9ji08055rah7k6p",
+					},
+					{
+						link: "https://thetaplus-13e54473-f699-4b6d-99fe-4b846eab3fd-e275e6.spheron.app/tiktok.jpg",
+						videoId: "video_qy6ht1kskkdcfinyb9e4c36wrm",
+					},
 				].map((src, i) => (
-					<img
-						src={src}
-						onDragStart={handleDragStart}
-						role="presentation"
-						style={{
-							height: "300px",
-							width: `98%`,
-							borderRadius: "10px",
+					<Box
+						sx={{ cursor: "pointer" }}
+						key={src.videoId}
+						onClick={() => {
+							navigate(`/video/${src.videoId}`);
 						}}
-						alt={"banner-" + i}
-					/>
+					>
+						<img
+							src={src.link}
+							onDragStart={handleDragStart}
+							role="presentation"
+							style={{
+								height: "300px",
+								width: `98%`,
+								borderRadius: "10px",
+							}}
+							alt={"banner-" + i}
+						/>
+					</Box>
 				))}
 			/>
 		</BannerBox>
