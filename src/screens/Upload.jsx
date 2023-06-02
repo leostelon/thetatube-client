@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { RiImageEditLine } from "react-icons/ri";
 
 import { uploadVideo } from "../api/video";
+import { useNavigate } from "react-router-dom";
 
 export function Upload() {
 	return (
@@ -29,6 +30,7 @@ export function Upload() {
 	);
 }
 const UploadBox = () => {
+	const navigate = useNavigate();
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [duration, setDuration] = useState();
@@ -112,6 +114,8 @@ const UploadBox = () => {
 
 		toast("Successfully uploaded your dataset", { type: "success" });
 		setUploadLoading(false);
+		await new Promise((resolve) => setTimeout(resolve, 3000));
+		navigate(`/profile/${loggedInAddress}`);
 	}
 
 	return (
