@@ -5,7 +5,7 @@ const { pinFileToIPFS } = require("../api/nftStorage");
 
 const collectionReference = db.collection("User");
 
-const createToken = async function (address) {
+export const createToken = async function (address) {
 	try {
 		await window.ethereum.request({
 			method: "personal_sign",
@@ -26,7 +26,7 @@ const createToken = async function (address) {
 	}
 };
 
-const createUser = async function (address) {
+export const createUser = async function (address) {
 	try {
 		let user;
 		try {
@@ -45,7 +45,7 @@ const createUser = async function (address) {
 	}
 };
 
-const getUser = async function (address) {
+export const getUser = async function (address) {
 	try {
 		let user;
 		try {
@@ -57,7 +57,7 @@ const getUser = async function (address) {
 	}
 };
 
-const enableSubscription = async function (contractAddress) {
+export const enableSubscription = async function (contractAddress) {
 	try {
 		const userAddress = await getWalletAddress();
 		const response = await collectionReference
@@ -69,7 +69,7 @@ const enableSubscription = async function (contractAddress) {
 	}
 };
 
-const updateProfilePic = async function (file) {
+export const updateProfilePic = async function (file) {
 	try {
 		// Upload thumbnail
 		const imageResponse = await pinFileToIPFS(file);
@@ -84,7 +84,7 @@ const updateProfilePic = async function (file) {
 	}
 };
 
-const updateUsername = async function (username) {
+export const updateUsername = async function (username) {
 	try {
 		const userAddress = await getWalletAddress();
 		const response = await collectionReference
@@ -94,13 +94,4 @@ const updateUsername = async function (username) {
 	} catch (error) {
 		console.log(error.message);
 	}
-};
-
-module.exports = {
-	createToken,
-	createUser,
-	getUser,
-	enableSubscription,
-	updateProfilePic,
-	updateUsername,
 };
